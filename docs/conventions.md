@@ -71,6 +71,8 @@ description: <≤300 chars: what it does + the phrases that should trigger it>
 - "Done when" items are evidence (output, path, commit SHA), never "I checked".
 - Stay neutral between hosts: never name host-specific tools or features in a skill body. Say "ask the
   user", "use a fresh sub-agent if available". **(checked)**: see Forbidden strings.
+- Refer to another skill as `fab:<name>`, with no host sigil (`/` or `$`), so one body works in both hosts. Every
+  `fab:<name>` under `skills/` must name an existing skill. **(checked)**
 
 ## Gates
 

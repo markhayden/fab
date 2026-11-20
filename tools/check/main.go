@@ -45,6 +45,7 @@ func run(root string) ([]Finding, error) {
 	for _, d := range dirs {
 		findings = append(findings, checkSkill(d)...)
 	}
+	findings = append(findings, checkRepo(root, dirs)...)
 	return findings, nil
 }
 
