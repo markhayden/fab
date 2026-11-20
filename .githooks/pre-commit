@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runs fab's validator before every commit. Enable once per clone:
+#   git config core.hooksPath .githooks
+exec go run ./tools/check
