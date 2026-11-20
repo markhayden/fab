@@ -159,3 +159,12 @@ func TestCheckRepo(t *testing.T) {
 		})
 	}
 }
+
+// The T1 spike stubs live on as known-good fixtures for a skill and a recipe.
+func TestSpikeStubsPass(t *testing.T) {
+	for _, dir := range []string{"testdata/hello", "testdata/hello-recipe"} {
+		for _, f := range append(checkSkill(dir), checkRecipe(dir)...) {
+			t.Errorf("%s: unexpected finding: %s", dir, f)
+		}
+	}
+}
