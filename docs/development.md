@@ -54,6 +54,24 @@ Verified on Claude Code 2.1.329 and Codex CLI 0.170.0.
 The version lives only in `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`; the check fails if they differ.
 Bump on every shipped change: patch for wording, minor for a new skill or recipe, major for a rename or removal.
 
+The bump is what makes Claude update. Tested 2026-11-20 with a fixture plugin (Claude from a local-path marketplace,
+Codex from a git URL), changing content at the same version, then with a bump:
+
+| Host | Same version, new content | Bumped version |
+|---|---|---|
+| Claude Code 2.1.329 | Not picked up: `plugin update` says "already at the latest version" | Installed into a new `cache/<version>/` dir (old one kept); restart to apply |
+| Codex 0.170.0 | Picked up by `marketplace upgrade` (cache replaced in place) | Picked up; cache dir renamed to the new version |
+
+Claude only accepts `owner/repo`, `https://`, or local-path marketplace sources, so the Claude half ran from a local
+path; both source types land in the same versioned cache.
+
+## Updating an install
+
+```sh
+claude plugin marketplace update fab && claude plugin update fab@fab   # then restart the session
+codex plugin marketplace upgrade fab
+```
+
 ## Adding or changing a skill
 
 Every skill goes through a grill session (see `skill-audit.md`):
