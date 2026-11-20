@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "fab",
+  "owner": {
+    "name": "WaffleHammock"
+  },
+  "plugins": [
+    {
+      "name": "fab",
+      "source": "./",
+      "description": "Mark Hayden's dev skills and recipes."
+    }
+  ],
+  "description": "fab: dev skills and recipes for Claude Code and Codex."
+}
