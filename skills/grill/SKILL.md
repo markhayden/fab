@@ -12,7 +12,7 @@ asking again. The cheapest time to find a wrong assumption is before anything is
 ## Inputs
 
 - The user's request, plus anything already settled earlier in the conversation.
-- The run: start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
+- The run (`.fab/<YYYY-MM-DD>-<slug>/`): start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/grill.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
@@ -32,14 +32,19 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step):
 
 ### Asking
 
-- One question per message. Merge questions only when they're naturally answered together.
-- The title is the decision itself. Offer options, give each its practical consequence, and mark one
-  "(recommended)". If you can't recommend one, say what you'd need to know:
+- One question at a time. Merge questions only when they're naturally answered together.
+- The question is the decision itself. Offer 2–4 options, each a short label plus its practical consequence, with
+  your recommendation first and marked "(Recommended)". If you can't recommend one, say what you'd need to know.
+- If your host has a tool for asking the user a multiple-choice question, use it, so the user picks instead of
+  typing. Put any context the user needs (facts you found, why the question matters) in a short message before it.
+- Otherwise, write it as text with a blank line between options:
 
   ```
-  Q3 · If the export file already exists, should export stop?
-  - Stop and show the path (recommended). The existing file is kept; a rerun needs a new name.
-  - Replace it. Reruns are one step; the previous export is lost.
+  **Q3 · If the export file already exists, should export stop?**
+
+  1. **Stop and show the path (Recommended)**: the existing file is kept; a rerun needs a new name.
+
+  2. **Replace it**: reruns are one step; the previous export is lost.
   ```
 
 - "Sounds good" or "whatever you think" settles a decision only if you recommended something; say what you're
@@ -49,7 +54,7 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step):
 - "Wait, what?" or "explain that simpler": rephrase the current question in plain words with a concrete example, and
   keep the same number. It may also mean the premise is wrong, so ask.
 
-**GATE:** present `grill.md`, wait for approval.
+**GATE:** present `grill.md`, wait for approval. Offer it as a choice (approve, or name what to change) the same way.
 
 ## Output
 

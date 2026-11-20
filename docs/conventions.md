@@ -154,8 +154,8 @@ and nothing approved is ever redone.
    one: if the user's message clearly continues it (for example, answers its pending question), continue it and say
    which run; otherwise offer it by name and ask whether to continue it or start fresh. Several: list the newest five and ask which.
    Never pick one silently.
-3. **No run to join:** create one. Propose a short slug from the request, show the path in your first message, and let
-   the user rename it. Then make sure `.fab/` is kept out of git (below).
+3. **No run to join:** create one named `<today's date>-<short slug>`, e.g. `.fab/2026-11-20-export-retry/`; the date
+   prefix keeps runs in order. Show the path in your first message and let the user rename the slug. Then make sure `.fab/` is kept out of git (below).
 4. **Joining mid-chain:** an earlier step with no row is not run. Append a `skipped` row with the note
    `step: started later in chain`.
 5. **Earlier chat counts:** if the work was already discussed before the run existed, carry what was settled into the
