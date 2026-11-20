@@ -41,11 +41,12 @@ codex plugin marketplace upgrade fab
 
 | Skill | What it does |
 |---|---|
+| `grill` | Interviews you until intent and every design decision are settled, then writes `grill.md` for the spec. |
 | `voice` | Writes or rewrites content in your voice, from your private voice profile. Offers to build the profile if you don't have one. |
 
 ## Recipes
 
-None shipped yet. `bigdev` (full spec → plan → build → test flow) and `tinydev` (a lighter flow for small changes) are in
+None shipped yet. `bigdev` (the full grill → spec → design → plan → build → test flow) and `tinydev` (a lighter flow for small changes) are in
 progress.
 
 ## Make it yours
@@ -76,7 +77,8 @@ pass `--add-dir ~/.config/fab`; without access the skill warns and falls back to
 
 ## Credits
 
-Many ideas are adapted from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT). Every fab skill
+Many ideas are adapted from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) and
+[mattpocock/skills](https://github.com/mattpocock/skills) (both MIT). Every fab skill
 is rewritten through its own review; nothing is vendored.
 
 ## License

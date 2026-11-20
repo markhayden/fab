@@ -121,8 +121,8 @@ run that skill, including in a fresh sub-agent.
 
 Workflow skills hand off through files in the target project, not through chat context.
 
-- **Run directory:** `<project>/.fab/<YYYY-MM-DD-slug>/`. The slug is named when the run starts; resuming takes
-  the slug or the path.
+- **Run directory:** `<project>/.fab/<YYYY-MM-DD-slug>/`, where `<project>` is the git top-level directory, or the
+  current directory outside git. Resuming takes the slug or the path.
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
   skills: `grill.md`, `spec.md`, `plan.md`, `build.md`, `tests.md`). Standalone utility skills (like
   `voice`) write no project state.
@@ -143,14 +143,39 @@ Workflow skills hand off through files in the target project, not through chat c
   re-presented at its gate, not regenerated. If an approved artifact's current mtime differs from the one
   recorded at approval, re-present it for confirmation before continuing.
 
+### Starting or joining a run
+
+Every workflow skill does this first, whether a recipe runs it or the user calls it directly. Work can start anywhere,
+and nothing approved is ever redone.
+
+1. **A run was named** (slug or path): use it.
+2. **Otherwise, look for open runs** in `<project>/.fab/`: a run is open until its last chain step (`test`) has an
+   `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. Exactly
+   one: if the user's message clearly continues it (for example, answers its pending question), continue it and say
+   which run; otherwise offer it by name and ask whether to continue it or start fresh. Several: list the newest five and ask which.
+   Never pick one silently.
+3. **No run to join:** create one. Propose a short slug from the request, show the path in your first message, and let
+   the user rename it. Then make sure `.fab/` is kept out of git (below).
+4. **Joining mid-chain:** an earlier step with no row is not run. Append a `skipped` row with the note
+   `step: started later in chain`.
+5. **Earlier chat counts:** if the work was already discussed before the run existed, carry what was settled into the
+   artifact (marked "from the conversation") instead of asking again.
+
+### Writing during a step
+
+- Append a `started` row when the step begins.
+- For interactive steps, save the artifact after every exchange, including the pending question, so an interrupted
+  session resumes where it stopped.
+- When the artifact is complete and waiting at its gate, append a `draft` row. On approval, append an `approved` row
+  with the mtime.
+- A decision settled by `~/.config/fab/preferences.md` is not asked. Say so in the chat in one line ("From your
+  preferences: …") and mark it "from preferences" in the artifact, so the user can overrule it at the gate.
+
 ### Keeping `.fab/` out of git
 
-On first use in a project:
-
-1. Inside a git work tree: `git rev-parse --git-path info/exclude` gives the exclude file (this is correct in linked
-   worktrees too). If it doesn't already contain the line `/.fab/`, append it. Print a one-line notice.
-2. Outside git: do nothing, print a one-line notice.
-3. Exclude file not writable: warn in one line and continue.
+Whenever a skill uses `.fab/`, make sure `.fab/.gitignore` exists and contains the single line `*`. Git then
+ignores the whole folder, that file included. It needs no write to `.git/` (which sandboxes often block), works in
+linked worktrees, and is harmless outside git.
 
 Never edit a tracked `.gitignore` for this.
 
