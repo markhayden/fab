@@ -63,6 +63,10 @@ but if it conflicts with an approval gate, the agent asks instead of skipping th
 ("always include a rollback section"), not step numbers, so they keep working as fab changes. Keeping these files in
 sync across machines is up to you (a private dotfiles repo works).
 
+`~/.config/fab/` is outside your project, so Claude Code asks before reading it. To skip the prompt, allow it once in
+`~/.claude/settings.json`: `"permissions": { "allow": ["Read(~/.config/fab/**)"] }`. In headless runs (`claude -p`),
+pass `--add-dir ~/.config/fab`; without access the skill warns and falls back to defaults.
+
 ## Docs
 
 - [Principles](docs/principles.md): why fab is built the way it is.
