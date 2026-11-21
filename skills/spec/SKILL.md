@@ -32,7 +32,7 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
    `step: no observable behavior change` is not missing: cite grill's requirements instead.
    Never assume an answer that changes a success criterion; record any other assumption under Assumptions.
 3. **Write success criteria** and map each to what it proves: story IDs (`S1, S3`) when `stories.md` exists and
-   stories wasn't skipped, otherwise the settled requirement in plain words. Stories under Removed aren't
+   its step wasn't skipped (`step:` note), otherwise the settled requirement in plain words. Stories under Removed aren't
    requirements. Never invent stories or IDs.
 4. **Pick test seams.** For each criterion, propose the outermost existing public boundary that can verify it (a
    CLI's output, an HTTP API, a public function); choose per criterion before merging shared seams. If a criterion

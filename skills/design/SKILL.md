@@ -12,7 +12,7 @@ on a canvas instead of invented during build. It runs only when there's somethin
 ## Inputs
 
 - The run (`.fab/<YYYY-MM-DD>-<slug>/`): start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
-- `spec.md` from the run, plus `stories.md` when present and not skipped. Cite active story IDs (`S1`), never
+- `spec.md` from the run, plus `stories.md` when present and its step wasn't skipped (`step:` note). Cite active story IDs (`S1`), never
   Removed ones; without stories, cite the spec's numbered criteria.
 - A connected design tool (such as Paper), or design files the user provides (mockups, screenshots, exports).
 - The project's existing design system: tokens, components, and screens in the repo or the design file.
