@@ -28,10 +28,12 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
    with a binding repo constraint. Current behavior that the change replaces is not a conflict.
 2. **Fill gaps only if they block.** If either file is missing, use whichever exists, plus the conversation and the
    repo. Ask at most three questions in total, only about gaps that would change a success criterion, using
-   [grill's Asking rules](../grill/SKILL.md#asking). If more remain, offer to run the missing earlier step first.
+   [grill's Asking rules](../grill/SKILL.md#asking). If more remain, offer to run fab:grill or fab:stories first. A stories row `skipped` with
+   `step: no observable behavior change` is not missing: cite grill's requirements instead.
    Never assume an answer that changes a success criterion; record any other assumption under Assumptions.
-3. **Write success criteria** and map each to what it proves: story IDs (`S1, S3`) when `stories.md` exists,
-   otherwise the settled requirement in plain words. Never invent stories or IDs.
+3. **Write success criteria** and map each to what it proves: story IDs (`S1, S3`) when `stories.md` exists and
+   stories wasn't skipped, otherwise the settled requirement in plain words. Stories under Removed aren't
+   requirements. Never invent stories or IDs.
 4. **Pick test seams.** For each criterion, propose the outermost existing public boundary that can verify it (a
    CLI's output, an HTTP API, a public function); choose per criterion before merging shared seams. If a criterion
    needs a new harness or public interface, ask before writing it in, since that adds work. A harness is new when
@@ -60,7 +62,7 @@ grill asks.
 ## Done when
 
 - `spec.md` has every required section, and each success criterion is testable and cites a story ID or requirement.
-- Every story in `stories.md`, when it exists, is covered by at least one criterion.
+- Every story in `stories.md` (except Removed), when it exists, is covered by at least one criterion.
 - No open question changes a success criterion.
 - The ledger shows `started`, then `draft`, then `approved` with the mtime (or `skipped` with a `gate` note when a
   recipe skips approval), for `spec.md`.

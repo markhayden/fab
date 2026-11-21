@@ -43,6 +43,7 @@ codex plugin marketplace upgrade fab
 |---|---|
 | `grill` | Interviews you until intent and every design decision are settled, then writes `grill.md` for the spec. |
 | `spec` | Turns the settled decisions and user stories into `spec.md`: testable success criteria, scope, implementation and testing decisions, boundaries. |
+| `stories` | Writes the user stories for settled work into `stories.md`: one per behavior, each with a concrete example. Skips (with your OK) when nothing observable changes. |
 | `voice` | Writes or rewrites content in your voice, from your private voice profile. Offers to build the profile if you don't have one. |
 
 ## Recipes
