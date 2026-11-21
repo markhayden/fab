@@ -168,6 +168,9 @@ and nothing approved is ever redone.
   session resumes where it stopped.
 - When the artifact is complete and waiting at its gate, append a `draft` row. On approval, append an `approved` row
   with the mtime.
+- A step with several gates (build's checkpoints) appends a `draft` row at each one, and a `started` row noting
+  the gate when an intermediate one is approved. Only its last gate gets the `approved` row. Resuming with a
+  `draft` as the step's last row re-presents that gate.
 - A decision settled by `~/.config/fab/preferences.md` is not asked. Say so in the chat in one line ("From your
   preferences: …") and mark it "from preferences" in the artifact, so the user can overrule it at the gate.
 
