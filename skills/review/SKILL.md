@@ -19,7 +19,8 @@ the right thing" separate from "is it done right".
 - What the target answers to: for a diff, `spec.md` (plus `plan.md` and `design.md`); for an artifact, the
   artifacts before it in the chain; with neither, the user's request.
 - The repo's own checks (tests, linters, `AGENTS.md` commands), run before each round.
-- The repo's written standards: `AGENTS.md`/`CLAUDE.md`, `CONTRIBUTING.md`, style or convention docs.
+- The repo's written standards: `AGENTS.md`/`CLAUDE.md`, `CONTRIBUTING.md`, `CODING_STANDARDS.md`, style or
+  convention docs.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/review.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 

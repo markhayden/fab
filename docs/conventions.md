@@ -127,7 +127,8 @@ Workflow skills hand off through files in the target project, not through chat c
   current directory outside git. Resuming takes the slug or the path.
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
   skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`; plus one
-  `review-<target>.md` per review, one `debug-<bug>.md` per bug, and `pitch.md` when an idea was pitched first). Standalone utility skills (like
+  `review-<target>.md` per review, one `debug-<bug>.md` per bug, `retro.md` when a run is looked back on (numbered after the first), and `pitch.md` when an idea was pitched
+  first). Standalone utility skills (like
   `voice`) write no project state.
 - **`ledger.md`:** append-only table, one row per event:
 
@@ -148,7 +149,7 @@ Workflow skills hand off through files in the target project, not through chat c
   re-presented at its gate, not regenerated. If an approved artifact's current mtime differs from the one
   recorded at approval, re-present it for confirmation before continuing; for `pitch.md`, that means a fresh
   verdict at its gate.
-  Records outside the chain (`review-<target>.md`, `debug-<bug>.md`) whose latest row is `started` or `draft`
+  Records outside the chain (`review-<target>.md`, `debug-<bug>.md`, `retro.md`) whose latest row is `started` or `draft`
   never decide the next step: name them when resuming the run, and continue one when the user picks it or calls
   its skill.
 
@@ -161,16 +162,17 @@ and nothing approved is ever redone.
 2. **Otherwise, look for open runs** in `<project>/.fab/`: a run is open until its last chain step (`test`) has an
    `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. A run
    whose latest pitch row is an `approved` killed or parked verdict is closed too; naming it reopens it. A run whose rows
-   are all `debug` or `review` rows (a bug fixed on its own) is closed once each record's latest row is `approved`. Exactly
+   are all `debug` or `review` rows (a bug fixed on its own) is closed once each record's latest row is `approved`.
+   `retro` rows never count toward whether a run is open: a retro never reopens or holds open a run. Exactly
    one: if the user's message clearly continues it (for example, answers its pending question), continue it and say
    which run; otherwise offer it by name and ask whether to continue it or start fresh. Several: list the newest five and ask which.
-   Never pick one silently.
+   Never pick one silently. (`retro` looks back, so it offers closed runs instead, and never creates one.)
 3. **No run to join:** create one named `<today's date>-<short slug>`, e.g. `.fab/2026-11-20-export-retry/`; the date
    prefix keeps runs in order. Show the path in your first message and let the user rename the slug. Then make sure `.fab/` is kept out of git (below).
 4. **Joining mid-chain:** an earlier step with no row is not run. Append a `skipped` row with the note
    `step: started later in chain`.
-5. **No run at all** is allowed for `review` alone, when the work being reviewed has no run (someone else's
-   branch, say): its record goes in chat.
+5. **No run at all** is allowed for `review` and `retro` alone, when the work has no run (someone else's branch,
+   or a session with no run): the record goes in chat.
 6. **Earlier chat counts:** if the work was already discussed before the run existed, carry what was settled into the
    artifact (marked "from the conversation") instead of asking again.
 
