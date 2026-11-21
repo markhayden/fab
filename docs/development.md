@@ -54,6 +54,11 @@ the design skill, pass Paper explicitly: `--mcp-config '{"mcpServers":{"paper":{
 `codex exec` prints only the final message; add `--json` to see intermediate messages and commands. It also waits on
 stdin when stdin is open but empty (a background shell), so redirect from `/dev/null`.
 
+To live-test an unreleased skill in Codex, point the prompt at the checkout instead: "read and follow
+`<checkout>/skills/<name>/SKILL.md`, resolving its relative links against that folder". Copying files into
+`~/.codex/plugins/cache/` no longer works: Codex rebuilds the cache from the marketplace at startup (seen
+2026-11-21).
+
 Verified on Claude Code 2.1.329 and Codex CLI 0.170.0.
 
 ## Versioning

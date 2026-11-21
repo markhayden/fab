@@ -43,8 +43,8 @@ mtime doesn't match what was recorded: ask before going on.
    - **Standards:** where the target breaks the repo's written rules (citing the rule), and, for code, the smells
      in the briefs file. A written repo rule beats a smell.
    Each finding comes back with its axis, a severity (`bug`, `gap`, or `nit`), and the exact place.
-4. **Answer every finding,** whatever its size: fix it, or write why not. A bug fix starts with a test that
-   reproduces it when the bug is in behavior a test can reach. Every fix to tracked files passes the repo's checks
+4. **Answer every finding,** whatever its size: fix it, or write why not. A bug is fixed with fab:debug (usually
+   its fast path). Every fix to tracked files passes the repo's checks
    and goes in its own commit through the hooks; edits to run artifacts stay uncommitted. Never fix by weakening a test or a check. A fix that would change a criterion, a
    check, a dependency, a task boundary, or the design isn't yours to make: it becomes an open dispute. Edits to an approved artifact send it back to its gate.
    A rebuttal settled by preferences is marked "from preferences".
