@@ -12,8 +12,8 @@ command that fails on this bug; without it, every theory is a guess.
 ## Inputs
 
 - The bug: the user's report, a failing check, or a bug `fab:test` found (with its failing test and output).
-- The run (`.fab/<YYYY-MM-DD>-<slug>/`): when test or review calls this, use the caller's run (see Writing during a
-  step); otherwise start or join one as in [Starting or joining a
+- The run (`.fab/<YYYY-MM-DD>-<slug>/`): when another step or a recipe calls this, use the caller's run (see Writing
+  during a step); otherwise start or join one as in [Starting or joining a
   run](../../docs/conventions.md#starting-or-joining-a-run). Called (directly or not) by a review with no run, the
   record goes in chat and the guided script's files go in the system temp dir.
 - Known-good points for regressions: `build.md`'s starting SHA, an earlier `tests.md` SHA, a release tag.
@@ -82,8 +82,8 @@ suggest without asking. A blocked debugger or checkout is handled like a blocked
    Stop and ask first when the fix would change a spec criterion, the design, or a dependency, or reach beyond
    the bug's area. Three failed fixes without progress: stop and report what you tried.
 
-**GATE:** present `debug-<bug>.md`, wait for approval. Offer it as a choice (approve, or name what to change), the
-way grill asks. When test or review called this, the record goes to the caller's gate instead, and the caller's
+**GATE:** present `debug-<bug>.md`, wait for approval. Offer it as a choice (approve, or name what to change), the way
+grill asks. When another step or a recipe called this, the record goes to the caller's gate instead, and the caller's
 other work waits until the fix is verified.
 
 ## Output

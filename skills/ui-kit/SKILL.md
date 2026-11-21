@@ -66,7 +66,7 @@ it and offer fab:debug.
 
 **GATE:** present `ui-kit-<job>.md` with any commits, wait for approval. Offer it as a choice (approve, or name what
 to change), the way fab:grill asks. When another step or a recipe called this in a run, the record names its caller
-and goes to the caller's gate instead (reuse excepted).
+and goes to the caller's gate instead (reuse and setup excepted).
 
 ## Output
 

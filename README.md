@@ -60,8 +60,13 @@ codex plugin marketplace upgrade fab
 
 ## Recipes
 
-None shipped yet. `bigdev` (the full grill → stories → spec → design → plan → build → test flow) and `tinydev` (a lighter flow for small changes) are in
-progress.
+Recipes are call-only: they run only when you name them (`/fab:bigdev` in Claude Code, `$fab:bigdev` in Codex).
+
+| Recipe | What it does |
+|---|---|
+| `bigdev` | The full flow, from interview to an open pull request: grill, stories, spec (reviewed), UI reuse, design, plan (reviewed), build (reviewed), simplify, test, then internal docs, public docs and style guide upkeep at one closing gate, a retro offered, then the PR with CI watched. |
+
+`tinydev`, a lighter flow for small, clear changes, is in progress.
 
 ## Make it yours
 

@@ -153,8 +153,8 @@ Workflow skills hand off through files in the target project, not through chat c
   the one recorded at approval, re-present it for confirmation before continuing; for `pitch.md`, that means a fresh
   verdict at its gate. Records outside the chain (`review-<target>.md`, `debug-<bug>.md`, `simplify-<target>.md`,
   `knowledge-<target>.md`, `docs-<target>.md`, `ui-kit-<job>.md`, `retro.md`) whose latest row is `started` or `draft`
-  never decide the next step: name them when resuming the run, and continue one when the user picks it or calls its
-  skill.
+  never decide the next step (a run a recipe drives follows the recipe's Steps table instead): name them when resuming
+  the run, and continue one when the user picks it or calls its skill.
 
 ### Starting or joining a run
 
@@ -163,7 +163,9 @@ and nothing approved is ever redone.
 
 1. **A run was named** (slug or path): use it.
 2. **Otherwise, look for open runs** in `<project>/.fab/`: a run is open until its last chain step (`test`) has an
-   `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. A run whose
+   `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. A run a
+   recipe drives (its latest recipe row for `<recipe>.md` is `started` or `draft`) stays open until that row is
+   `approved` or `skipped`, whatever its chain rows say; once it is, the run is closed. A run whose
    latest pitch row is an `approved` killed or parked verdict is closed too; naming it reopens it. Ignoring `retro`
    rows, a run whose rows are all `debug`, `review`, `simplify`, `knowledge`, `docs`, or `ui-kit` rows (work done
    outside the chain, such as a bug fix) is closed once each record's latest row is `approved` or `skipped`. `retro`
@@ -193,10 +195,10 @@ and nothing approved is ever redone.
   when an intermediate one is approved. Only its last gate gets the `approved` row. Resuming with a `draft` as the
   step's last row re-presents that gate.
 - A record made by a skill another step called (`review`, `debug`, `simplify`, `knowledge`, `docs`, `ui-kit`) uses the
-  caller's run, names its caller, and goes to the caller's gate (except `ui-kit`'s reuse record, which settles at its
-  own gate before plan starts). Settling that gate (approved or skipped) appends the
-  same status for each called record presented there, and for any record those called in turn, approved ones with their
-  own mtime. With no run (a review of someone's branch), every record down that chain of calls goes in chat too.
+  caller's run, names its caller, and goes to the caller's gate (except `ui-kit`'s setup record, and its reuse record,
+  which settles at its own gate before plan starts). Settling that gate (approved or skipped) appends the same status
+  for each called record presented there, and for any record those called in turn, approved ones with their own mtime.
+  With no run (a review of someone's branch), every record down that chain of calls goes in chat too.
 - A decision settled by `~/.config/fab/preferences.md` is not asked, unless the skill reserves it for the user (such as
   picking which changes to make). Say so in the chat in one line ("From your preferences: …") and mark it "from
   preferences" in the artifact, so the user can overrule it at the gate.
