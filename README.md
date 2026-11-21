@@ -41,6 +41,7 @@ codex plugin marketplace upgrade fab
 
 | Skill | What it does |
 |---|---|
+| `docs` | Keeps public docs true after a change (README, guides, API reference, changelog, examples), adds what users now need, and runs the commands and examples it documents wherever that's safe. |
 | `grill` | Interviews you until intent and every design decision are settled, then writes `grill.md` for the spec. |
 | `knowledge` | Keeps internal docs true (knowledge base, AGENTS.md, ADRs, glossary, specs and plans) without rewriting dated records, and carries a run's lasting decisions out of `.fab/`. |
 | `pitch` | Pitches your idea back to you as its honest advocate; you challenge it until you call it sold, killed, or parked. A sold pitch seeds `grill`. |

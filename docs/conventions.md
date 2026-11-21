@@ -128,7 +128,7 @@ Workflow skills hand off through files in the target project, not through chat c
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
   skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`; plus one
   `review-<target>.md` per review, one `debug-<bug>.md` per bug, one `simplify-<target>.md`
-  per simplify pass, one `knowledge-<target>.md` per knowledge pass, `retro.md` when a run is looked back on (numbered after the first), and `pitch.md` when an idea was pitched
+  per simplify pass, one `knowledge-<target>.md` per knowledge pass, one `docs-<target>.md` per docs pass, `retro.md` when a run is looked back on (numbered after the first), and `pitch.md` when an idea was pitched
   first). Standalone utility skills (like
   `voice`) write no project state.
 - **`ledger.md`:** append-only table, one row per event:
@@ -150,7 +150,7 @@ Workflow skills hand off through files in the target project, not through chat c
   re-presented at its gate, not regenerated. If an approved artifact's current mtime differs from the one
   recorded at approval, re-present it for confirmation before continuing; for `pitch.md`, that means a fresh
   verdict at its gate.
-  Records outside the chain (`review-<target>.md`, `debug-<bug>.md`, `simplify-<target>.md`, `knowledge-<target>.md`, `retro.md`) whose latest row is `started` or `draft`
+  Records outside the chain (`review-<target>.md`, `debug-<bug>.md`, `simplify-<target>.md`, `knowledge-<target>.md`, `docs-<target>.md`, `retro.md`) whose latest row is `started` or `draft`
   never decide the next step: name them when resuming the run, and continue one when the user picks it or calls
   its skill.
 
@@ -163,17 +163,17 @@ and nothing approved is ever redone.
 2. **Otherwise, look for open runs** in `<project>/.fab/`: a run is open until its last chain step (`test`) has an
    `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. A run
    whose latest pitch row is an `approved` killed or parked verdict is closed too; naming it reopens it. Ignoring `retro`
-   rows, a run whose rows are all `debug`, `review`, `simplify`, or `knowledge` rows (work done outside the chain, such as a bug fix) is closed once each record's latest row is `approved` or `skipped`.
+   rows, a run whose rows are all `debug`, `review`, `simplify`, `knowledge`, or `docs` rows (work done outside the chain, such as a bug fix) is closed once each record's latest row is `approved` or `skipped`.
    `retro` rows never count toward whether a run is open: a retro never reopens or holds open a run. Exactly
    one: if the user's message clearly continues it (for example, answers its pending question), continue it and say
    which run; otherwise offer it by name and ask whether to continue it or start fresh. Several: list the newest five and ask which.
-   Never pick one silently. (`retro`, and `knowledge` on a run, look back, so they offer closed runs instead and never create one.)
+   Never pick one silently. (Skills that look back offer closed runs instead: see Looking back at a run.)
 3. **No run to join:** create one named `<today's date>-<short slug>`, e.g. `.fab/2026-11-20-export-retry/`; the date
    prefix keeps runs in order. Show the path in your first message and let the user rename the slug. Then make sure `.fab/` is kept out of git (below).
 4. **Joining mid-chain:** an earlier step with no row is not run. Append a `skipped` row with the note
    `step: started later in chain`.
 5. **No run at all** is allowed for `review` and `retro` alone, when the work has no run (someone else's branch,
-   or a session with no run): the record goes in chat.
+   or a session with no run), and for a skill a runless review calls: the record goes in chat.
 6. **Earlier chat counts:** if the work was already discussed before the run existed, carry what was settled into the
    artifact (marked "from the conversation") instead of asking again.
 
@@ -187,12 +187,60 @@ and nothing approved is ever redone.
 - A step with several gates (build's checkpoints) appends a `draft` row at each one, and a `started` row noting
   the gate when an intermediate one is approved. Only its last gate gets the `approved` row. Resuming with a
   `draft` as the step's last row re-presents that gate.
-- A record made by a skill another step called (`review`, `debug`, `simplify`, `knowledge`) uses the caller's run, names its caller, and goes
+- A record made by a skill another step called (`review`, `debug`, `simplify`, `knowledge`, `docs`) uses the caller's run, names its caller, and goes
   to the caller's gate. Settling that gate (approved or skipped) appends the same status for each called record
   presented there, and for any record those called in turn, approved ones with their own mtime. With no run (a review of someone's branch), the called record goes in chat too.
 - A decision settled by `~/.config/fab/preferences.md` is not asked, unless the skill reserves it for the user
   (such as picking which changes to make). Say so in the chat in one line ("From your
   preferences: …") and mark it "from preferences" in the artifact, so the user can overrule it at the gate.
+- `simplify`, `knowledge`, and `docs` write one record per target (`<skill>-<target>.md`, where `<target>` is a
+  short slug, never a path: `docs/api` becomes `docs-api`). An unfinished record for that target is resumed first,
+  where it lives (a called skill resumes only records in its caller's run). Another pass over a target whose record is approved or gate-skipped happens only when the user
+  asks, as `<skill>-<target>.2.md`, `.3.md`, and so on.
+
+### Looking back at a run
+
+For skills that look back at a finished run (`retro`, and `knowledge` or `docs` given a run):
+
+- Use the run named; otherwise offer the newest closed runs that hold work, plus any run with an unfinished record
+  of this skill (the record names its target), and ask which. An unfinished record is resumed before any new pass.
+  Never create a run for this.
+- The run's changes are the commits its work records list (build's tasks and review fixes, test's additions,
+  debug's and simplify's commits), not everything between two SHAs, and never this skill's own commits. When the
+  records list none, a skill that needs the changes asks which commits or range to use.
+- A target that already has an approved or gate-skipped record from this skill, in any run, is shown; another pass
+  happens only if the user asks.
+- The record goes in the run looked back on, unless another step called this skill: then the caller's run, as
+  above, or chat when the caller has no run. Either way, keep `.fab/` out of git (below).
+
+### Committing during a step
+
+For skills that commit outside build (`debug`, `simplify`, `retro`, `knowledge`, `docs`):
+
+- Record the SHA you start from. Before each commit, note the change in the artifact (or, with no run, in chat) as
+  in progress; after it, add the SHA. On resume, first check the git log against the artifact (a commit that
+  landed is recorded, not redone), then ask if `HEAD` still differs from the last recorded SHA.
+- A commit holds only the skill's own changes: stage just its hunks when a file also holds other edits, ask when
+  they share a line, and ask first when the index already holds other work.
+- Every commit passes the repo's checks and hooks, uses its commit types, and includes anything its rules require
+  with every change (such as a version bump). A commit that fails them is never forced: `debug` fixes the
+  cause within its own steps; the others roll back only their own changes (unstaging them and leaving earlier
+  staging as it was), report any they can't, and record the change as not applied.
+- When the sandbox blocks a write, check, hook, or commit, say so and ask; if it stays blocked, stop with the
+  artifact saved (in chat, if even that is blocked) and report what landed.
+
+### Picks
+
+Skills that propose changes (`simplify`, `retro`, `knowledge`, `docs`) let the user choose at a picks gate:
+
+- Present the open candidates (not applied, declined, reverted, or handed off), ranked and numbered, with what,
+  why, where, and effort; the user names which to apply (numbers, all, or none). Save the picks before applying any.
+- It's the first of the step's two gates (a step with several gates, above), and it stays with the skill even when
+  another step called it. With nothing to propose, it's skipped, unless the skill holds it anyway or the user asked
+  for a change at the final gate. A recipe may skip the final gate, never a picks gate with proposals on it, and preferences never settle
+  picks.
+- At the final gate, a change the user names that would itself need picking goes back through the picks gate;
+  anything the skill would make directly is just made.
 
 ### Keeping `.fab/` out of git
 

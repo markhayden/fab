@@ -11,30 +11,25 @@ same trouble doesn't happen again, and records it in `retro.md`.
 
 ## Inputs
 
-- The run (`.fab/<YYYY-MM-DD>-<slug>/`): the one named; otherwise offer the newest closed runs (see [Starting or
-  joining a run](../../docs/conventions.md#starting-or-joining-a-run)), plus any run with an unfinished `retro.md`,
-  and ask which. A run holding a single bug fix counts. If the run already has an approved `retro.md`, show it;
-  another look back happens only if the user asks, in `retro-2.md`, `retro-3.md`, …. Below, "the record" is
-  whichever of these this retro writes; an unfinished one is resumed first. Check `.fab/` is kept out of
-  git as in [Keeping .fab/ out of git](../../docs/conventions.md#keeping-fab-out-of-git). Its files are the evidence: the ledger; `build.md` (Deviations, stuck stops,
+- The run, chosen as in [Looking back at a run](../../docs/conventions.md#looking-back-at-a-run); a run holding a
+  single bug fix counts. Another look back at the same run is `retro-2.md`, `retro-3.md`, …; "the record" below is
+  whichever this retro writes. The run's files are the evidence: the ledger; `build.md` (Deviations, stuck stops,
   Noticed); every `review-*.md` finding; every `debug-*.md` (root cause, any "no seam" finding); `tests.md` (bugs,
-  weak tests, anything not verified); and questions in `grill.md`/`spec.md` that the user had already settled before.
+  weak tests, anything not verified); and questions in `grill.md`/`spec.md` the user had already settled before.
 - The current conversation, when retro runs in the session it looks back on. With no run, it's the only
-  evidence: skip the file and the ledger, and hold both gates below in chat (picks before applying anything).
-- The repo's environment, read before proposing anything: its agent instructions file (`AGENTS.md` or `CLAUDE.md`), standards and style docs,
-  hooks, CI config, linters, and the check commands they run.
+  evidence: skip the file and the ledger, and hold both gates below in chat.
+- The repo's environment, read before proposing anything: its agent instructions file (`AGENTS.md` or
+  `CLAUDE.md`), standards and style docs, hooks, CI config, linters, and the check commands they run.
 - Preferences: `~/.config/fab/preferences.md` (read; changing it is always asked).
 - Personal override: if `~/.config/fab/skills/retro.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
 ## Process
 
-Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step): `started` row first, save
-the record after every exchange and around every applied change: note it as in progress before committing, then
-add its SHA. A resumed retro checks the git log (and the preferences file) against the record before applying
-anything again. A commit that fails has only retro's own edits rolled back (report anything that can't be) and is recorded as
-not applied. A preference pick whose approved wording isn't in this session is asked again. When the
-sandbox blocks a write, check, or commit, say so and ask; if it stays blocked, stop and report in chat what
-landed.
+Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step),
+[Committing during a step](../../docs/conventions.md#committing-during-a-step), and
+[Picks](../../docs/conventions.md#picks): `started` row first, save the record after every exchange. On resume, also
+check the preferences file against the record, and ask again for a preference pick whose approved wording isn't in
+this session.
 
 1. **List what went wrong or cost time,** each with where it shows: a deviation, a stuck stop, a review finding, a
    bug, a weak test, a question asked twice, a long search, a failed or expensive command. No evidence, no candidate.
@@ -59,17 +54,16 @@ landed.
      edited from here.
 3. **Rank** by severity: how much it cost and how likely it recurs. At equal severity, a bug that reached a commit
    beats a review catch, which beats a slow step.
-4. **GATE:** present the record with the candidates numbered (evidence, change, effort), wait for approval. The
-   user approves by naming which to apply (numbers, all, or none); record the picks. This is the first of two
-   gates (Writing during a step: a step with several gates).
-5. **Apply the picks,** each in its own commit holding only that change (staging just its hunks when a file also
-   holds other edits; if the index already holds other work, ask the user to commit or unstage it first), passing the repo's checks and hooks, using the repo's commit types. A new check must fail on the original mistake (a fixture or a scratch copy) and pass on the current tree;
-   never loosen an existing one. A preferences entry is shown word for word and written only after the user
-   approves that write, after checking the file doesn't already hold it; it isn't committed anywhere, and
-   the record notes only that it was written (the ledger's next row notes the approval). Something that needs the user (a CI secret, a service setting) is listed for them instead.
+4. **GATE:** present the record with the candidates numbered (evidence, change, effort), wait for approval. This is
+   the picks gate, held even with no candidates, so the user sees that nothing was found.
+5. **Apply the picks,** each in its own commit. A new check must fail on the original mistake (a fixture or a
+   scratch copy) and pass on the current tree; never loosen an existing one. A preferences entry is shown word for
+   word and written only after the user approves that write, after checking the file doesn't already hold it; it
+   isn't committed anywhere, and the record notes only that it was written (the ledger's next row notes the
+   approval). Something that needs the user (a CI secret, a service setting) is listed for them instead.
 
 **GATE:** present the record with what was applied, wait for approval. Offer it as a choice (approve, or name what
-to change), the way grill asks. A change the user names that wasn't picked goes back through the picks gate.
+to change), the way fab:grill asks.
 
 ## Output
 
@@ -88,6 +82,5 @@ Commits for the applied changes, plus the record (`.fab/<run>/retro.md`, or `ret
 - Every candidate cites its evidence, and every applied check was shown failing on the original mistake.
 - Every applied change is committed or written with approval, and nothing else changed.
 - In a run, the ledger shows `retro` rows for the record (retro isn't a chain step: its rows never decide a run's
-  next step or reopen a closed run): `started`, `draft` at the picks gate, `started` noting the picks once chosen,
-  `draft` at the final gate, then `approved` with the mtime, or `skipped` with a `gate` note when a recipe skips
-  that final approval. The picks gate is never skipped: what gets applied is always the user's choice.
+  next step or reopen a closed run): `started`, `draft` and `started` around the picks gate, `draft` at the final
+  gate, then `approved` with the mtime, or `skipped` with a `gate` note when a recipe skips the final gate.
