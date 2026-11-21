@@ -42,11 +42,12 @@ codex plugin marketplace upgrade fab
 | Skill | What it does |
 |---|---|
 | `grill` | Interviews you until intent and every design decision are settled, then writes `grill.md` for the spec. |
+| `spec` | Turns the settled decisions and user stories into `spec.md`: testable success criteria, scope, implementation and testing decisions, boundaries. |
 | `voice` | Writes or rewrites content in your voice, from your private voice profile. Offers to build the profile if you don't have one. |
 
 ## Recipes
 
-None shipped yet. `bigdev` (the full grill → spec → design → plan → build → test flow) and `tinydev` (a lighter flow for small changes) are in
+None shipped yet. `bigdev` (the full grill → stories → spec → design → plan → build → test flow) and `tinydev` (a lighter flow for small changes) are in
 progress.
 
 ## Make it yours

@@ -71,4 +71,5 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step):
 
 - `grill.md` has Intent, Decisions, Handed off, and Open, and every decision lists its source.
 - No open item changes what "done" means.
-- The ledger shows `started`, then `draft`, then `approved` with the mtime, for `grill.md`.
+- The ledger shows `started`, then `draft`, then `approved` with the mtime (or `skipped` with a `gate` note when a
+  recipe skips approval), for `grill.md`.

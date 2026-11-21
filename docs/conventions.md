@@ -9,7 +9,7 @@ If a rule here and the checker disagree, the checker is wrong: fix it to match t
 - Names are lowercase letters, digits, and hyphens; they start with a letter; ≤32 chars. **(checked)**
 - The `fab:` plugin namespace is added by the host, so names carry no prefix.
 - Invocation is identical across hosts except the sigil: Claude `/fab:<name>`, Codex `$fab:<name>`.
-- **Skills** are named for the action they perform: `grill`, `spec`, `plan`, `build`, `test`, `voice`.
+- **Skills** are named for the action they perform or what they produce: `grill`, `stories`, `spec`, `design`, `plan`, `build`, `test`, `voice`.
 - **Recipes** that run the build flow are named `<size>dev`: `bigdev` (full ceremony), `tinydev` (light).
   Other recipes get a plain name for the kind of work (e.g. a future `spike`).
 - Every new skill or recipe gets a **name review** in its grill session, before it ships.
@@ -124,7 +124,7 @@ Workflow skills hand off through files in the target project, not through chat c
 - **Run directory:** `<project>/.fab/<YYYY-MM-DD-slug>/`, where `<project>` is the git top-level directory, or the
   current directory outside git. Resuming takes the slug or the path.
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
-  skills: `grill.md`, `spec.md`, `plan.md`, `build.md`, `tests.md`). Standalone utility skills (like
+  skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`). Standalone utility skills (like
   `voice`) write no project state.
 - **`ledger.md`:** append-only table, one row per event:
 
