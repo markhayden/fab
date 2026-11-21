@@ -127,7 +127,7 @@ Workflow skills hand off through files in the target project, not through chat c
   current directory outside git. Resuming takes the slug or the path.
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
   skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`; plus one
-  `review-<target>.md` per review). Standalone utility skills (like
+  `review-<target>.md` per review, and `pitch.md` when an idea was pitched first). Standalone utility skills (like
   `voice`) write no project state.
 - **`ledger.md`:** append-only table, one row per event:
 
@@ -142,9 +142,12 @@ Workflow skills hand off through files in the target project, not through chat c
     this recipe).
   - An `approved` row records the artifact's full-resolution mtime (`stat -f %Fm` on macOS, `stat -c %.9Y` on Linux).
 
-- **Resume:** the next action is the first step with no `approved` or `skipped` row. A `draft` artifact is
+- **Resume:** an unfinished pitch (its latest row `started` or `draft`) comes first: continue it from its Pending
+  item, or re-present its verdict gate. Otherwise the next action is the first step with no `approved` or
+  `skipped` row. A `draft` artifact is
   re-presented at its gate, not regenerated. If an approved artifact's current mtime differs from the one
-  recorded at approval, re-present it for confirmation before continuing.
+  recorded at approval, re-present it for confirmation before continuing; for `pitch.md`, that means a fresh
+  verdict at its gate.
 
 ### Starting or joining a run
 
@@ -153,7 +156,8 @@ and nothing approved is ever redone.
 
 1. **A run was named** (slug or path): use it.
 2. **Otherwise, look for open runs** in `<project>/.fab/`: a run is open until its last chain step (`test`) has an
-   `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. Exactly
+   `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. A run
+   whose latest pitch row is an `approved` killed or parked verdict is closed too; naming it reopens it. Exactly
    one: if the user's message clearly continues it (for example, answers its pending question), continue it and say
    which run; otherwise offer it by name and ask whether to continue it or start fresh. Several: list the newest five and ask which.
    Never pick one silently.

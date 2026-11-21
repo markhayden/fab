@@ -13,6 +13,11 @@ asking again. The cheapest time to find a wrong assumption is before anything is
 
 - The user's request, plus anything already settled earlier in the conversation.
 - The run (`.fab/<YYYY-MM-DD>-<slug>/`): start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
+- `pitch.md`, when the run has one: an unfinished pitch (latest row `started` or `draft`) is finished first,
+  with fab:pitch. An approved one whose mtime no longer matches its approval row also goes back through
+  fab:pitch for a fresh verdict. Use it only when its latest approved verdict is sold:
+  its For grill section seeds the intent and the decisions (marked "from the pitch"), so those points aren't asked
+  again, and its open items become questions.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/grill.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
@@ -62,7 +67,7 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step):
 
 - **Intent:** the six fields, one line each. Out of scope is never empty.
 - **Decisions:** numbered. Each has the question, the answer, why, and its source: the user, "from preferences",
-  "from the conversation", or a fact you looked up (with where).
+  "from the pitch", "from the conversation", or a fact you looked up (with where).
 - **Handed off:** choices left to a later step, each naming the step that owns it (`spec`, `plan`, `build`).
 - **Open:** anything unresolved. An open item that would change what "done" means blocks approval.
 - **Pending question:** while the interview is running, the question waiting for an answer.

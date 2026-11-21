@@ -44,6 +44,10 @@ claude -p '/fab:voice <ask>'
 codex exec --skip-git-repo-check '$fab:voice <ask>' </dev/null
 ```
 
+With `--plugin-dir`, headless Claude can't read the checkout's `docs/` or `references/` (outside its allowed
+directories), so skills fall back to their own text, e.g. inventing a ledger format. Add `--add-dir <checkout>` for
+faithful runs. An installed plugin doesn't have this problem: Claude reads its own plugin cache.
+
 MCP servers that a launcher passes to an interactive session (not in Claude's config) are missing in `claude -p`. For
 the design skill, pass Paper explicitly: `--mcp-config '{"mcpServers":{"paper":{"type":"stdio","command":"~/.paper/bin/paper","args":["mcp"]}}}' --allowedTools mcp__paper`.
 
