@@ -42,6 +42,7 @@ codex plugin marketplace upgrade fab
 | Skill | What it does |
 |---|---|
 | `grill` | Interviews you until intent and every design decision are settled, then writes `grill.md` for the spec. |
+| `knowledge` | Keeps internal docs true (knowledge base, AGENTS.md, ADRs, glossary, specs and plans) without rewriting dated records, and carries a run's lasting decisions out of `.fab/`. |
 | `pitch` | Pitches your idea back to you as its honest advocate; you challenge it until you call it sold, killed, or parked. A sold pitch seeds `grill`. |
 | `plan` | Breaks the approved spec (and design) into `plan.md`: vertical-slice tasks with checks that fail before and pass after, one commit each, and rollback checkpoints. |
 | `retro` | Looks back over a finished run and proposes environment fixes (checks for mechanical mistakes, standards for judgment calls, pointers, preferences), then applies the ones you pick and writes `retro.md`. |

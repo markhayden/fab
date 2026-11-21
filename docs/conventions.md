@@ -128,7 +128,7 @@ Workflow skills hand off through files in the target project, not through chat c
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
   skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`; plus one
   `review-<target>.md` per review, one `debug-<bug>.md` per bug, one `simplify-<target>.md`
-  per simplify pass, `retro.md` when a run is looked back on (numbered after the first), and `pitch.md` when an idea was pitched
+  per simplify pass, one `knowledge-<target>.md` per knowledge pass, `retro.md` when a run is looked back on (numbered after the first), and `pitch.md` when an idea was pitched
   first). Standalone utility skills (like
   `voice`) write no project state.
 - **`ledger.md`:** append-only table, one row per event:
@@ -150,7 +150,7 @@ Workflow skills hand off through files in the target project, not through chat c
   re-presented at its gate, not regenerated. If an approved artifact's current mtime differs from the one
   recorded at approval, re-present it for confirmation before continuing; for `pitch.md`, that means a fresh
   verdict at its gate.
-  Records outside the chain (`review-<target>.md`, `debug-<bug>.md`, `simplify-<target>.md`, `retro.md`) whose latest row is `started` or `draft`
+  Records outside the chain (`review-<target>.md`, `debug-<bug>.md`, `simplify-<target>.md`, `knowledge-<target>.md`, `retro.md`) whose latest row is `started` or `draft`
   never decide the next step: name them when resuming the run, and continue one when the user picks it or calls
   its skill.
 
@@ -162,12 +162,12 @@ and nothing approved is ever redone.
 1. **A run was named** (slug or path): use it.
 2. **Otherwise, look for open runs** in `<project>/.fab/`: a run is open until its last chain step (`test`) has an
    `approved` or `skipped` row, so a run started by one standalone skill stays open for a recipe to pick up. A run
-   whose latest pitch row is an `approved` killed or parked verdict is closed too; naming it reopens it. A run whose rows
-   are all `debug`, `review`, or `simplify` rows (a bug fixed on its own) is closed once each record's latest row is `approved` or `skipped`.
+   whose latest pitch row is an `approved` killed or parked verdict is closed too; naming it reopens it. Ignoring `retro`
+   rows, a run whose rows are all `debug`, `review`, `simplify`, or `knowledge` rows (work done outside the chain, such as a bug fix) is closed once each record's latest row is `approved` or `skipped`.
    `retro` rows never count toward whether a run is open: a retro never reopens or holds open a run. Exactly
    one: if the user's message clearly continues it (for example, answers its pending question), continue it and say
    which run; otherwise offer it by name and ask whether to continue it or start fresh. Several: list the newest five and ask which.
-   Never pick one silently. (`retro` looks back, so it offers closed runs instead, and never creates one.)
+   Never pick one silently. (`retro`, and `knowledge` on a run, look back, so they offer closed runs instead and never create one.)
 3. **No run to join:** create one named `<today's date>-<short slug>`, e.g. `.fab/2026-11-20-export-retry/`; the date
    prefix keeps runs in order. Show the path in your first message and let the user rename the slug. Then make sure `.fab/` is kept out of git (below).
 4. **Joining mid-chain:** an earlier step with no row is not run. Append a `skipped` row with the note
@@ -187,7 +187,7 @@ and nothing approved is ever redone.
 - A step with several gates (build's checkpoints) appends a `draft` row at each one, and a `started` row noting
   the gate when an intermediate one is approved. Only its last gate gets the `approved` row. Resuming with a
   `draft` as the step's last row re-presents that gate.
-- A record made by a skill another step called (`review`, `debug`, `simplify`) uses the caller's run, names its caller, and goes
+- A record made by a skill another step called (`review`, `debug`, `simplify`, `knowledge`) uses the caller's run, names its caller, and goes
   to the caller's gate. Settling that gate (approved or skipped) appends the same status for each called record
   presented there, and for any record those called in turn, approved ones with their own mtime. With no run (a review of someone's branch), the called record goes in chat too.
 - A decision settled by `~/.config/fab/preferences.md` is not asked, unless the skill reserves it for the user
