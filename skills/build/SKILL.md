@@ -48,9 +48,9 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step);
    approved artifact sends it back to its gate.
 4. **Stuck.** Three attempts at the same failure without progress: stop, and report what was tried and what you'd
    try next.
-5. **Before the final checkpoint,** review the whole diff against `spec.md` and `plan.md` with fresh eyes: a fresh
-   sub-agent if one is available, otherwise a careful pass of your own. Look for bugs, missed criteria, scope
-   creep, and needless complexity. Fix real bugs in their own commit; list the rest under Review.
+5. **Before the final checkpoint,** run fab:review on the whole diff (starting SHA to `HEAD`) against `spec.md` and
+   `plan.md`. Record each of its fix commits in `build.md` as it lands. Approving the final checkpoint also
+   approves `review-build.md`.
 6. **At each checkpoint,** run its checks, record its SHA, append a `draft` row noting the `CP`, and report: tasks
    done with SHAs, what passed, deviations, and anything noticed. Then stop, unless the user said to keep going
    (for example, "run to the end"). Approving a checkpoint before the last appends a `started` row noting the
@@ -74,12 +74,12 @@ Commits on the plan's branch, and `.fab/<run>/build.md`:
 - **Checkpoints:** each `CP` → SHA → what passed.
 - **Deviations:** each change from the plan, why, and whether the user approved it.
 - **Noticed:** things outside the tasks worth doing later, untouched.
-- **Review:** findings from the final review, and which were fixed (with SHA).
+- **Review:** a pointer to `review-build.md`, how many rounds ran, and any open disputes.
 
 ## Done when
 
 - Every plan task is done with a SHA, and its checks are recorded failing before and passing after (prefactors:
   passing both times).
-- The final checkpoint's checks pass at its recorded SHA, and the review ran.
+- The final checkpoint's checks pass at its recorded SHA, after the review's fixes.
 - The ledger shows `started`, `draft` at the final checkpoint, then `approved` with the mtime (or `skipped` with a
   `gate` note when a recipe skips approval), for `build.md`.

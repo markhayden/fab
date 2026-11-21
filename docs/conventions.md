@@ -70,7 +70,9 @@ description: <≤300 chars: what it does + the phrases that should trigger it>
 - Add a **Traps** entry only for a failure you've actually seen.
 - "Done when" items are evidence (output, path, commit SHA), never "I checked".
 - Stay neutral between hosts: never name host-specific tools or features in a skill body. Say "ask the
-  user", "use a fresh sub-agent if available". **(checked)**: see Forbidden strings.
+  user", "use a fresh sub-agent if available". **(checked)**: see Forbidden strings. The one exception is a
+  `references/` file that gives the commands for calling a host's CLI from the other host (`review`'s
+  cross-host reviewer); the skill body still names neither host.
 - Refer to another skill as `fab:<name>`, with no host sigil (`/` or `$`), so one body works in both hosts. Every
   `fab:<name>` under `skills/` must name an existing skill. **(checked)**
 
@@ -124,7 +126,8 @@ Workflow skills hand off through files in the target project, not through chat c
 - **Run directory:** `<project>/.fab/<YYYY-MM-DD-slug>/`, where `<project>` is the git top-level directory, or the
   current directory outside git. Resuming takes the slug or the path.
 - **Artifacts:** each workflow skill writes one file into the run directory (the set is defined by the chain
-  skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`). Standalone utility skills (like
+  skills: `grill.md`, `stories.md`, `spec.md`, `design.md`, `plan.md`, `build.md`, `tests.md`; plus one
+  `review-<target>.md` per review). Standalone utility skills (like
   `voice`) write no project state.
 - **`ledger.md`:** append-only table, one row per event:
 
@@ -158,7 +161,9 @@ and nothing approved is ever redone.
    prefix keeps runs in order. Show the path in your first message and let the user rename the slug. Then make sure `.fab/` is kept out of git (below).
 4. **Joining mid-chain:** an earlier step with no row is not run. Append a `skipped` row with the note
    `step: started later in chain`.
-5. **Earlier chat counts:** if the work was already discussed before the run existed, carry what was settled into the
+5. **No run at all** is allowed for `review` alone, when the work being reviewed has no run (someone else's
+   branch, say): its record goes in chat.
+6. **Earlier chat counts:** if the work was already discussed before the run existed, carry what was settled into the
    artifact (marked "from the conversation") instead of asking again.
 
 ### Writing during a step

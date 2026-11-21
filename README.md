@@ -43,6 +43,7 @@ codex plugin marketplace upgrade fab
 |---|---|
 | `grill` | Interviews you until intent and every design decision are settled, then writes `grill.md` for the spec. |
 | `plan` | Breaks the approved spec (and design) into `plan.md`: vertical-slice tasks with checks that fail before and pass after, one commit each, and rollback checkpoints. |
+| `review` | Adversarial review by the other host's agent (Codex from Claude Code, Claude Code from Codex): a spec reviewer and a standards reviewer each round, every finding fixed or rebutted, at least 2 rounds and at most 5. `build` runs it before its last checkpoint. |
 | `spec` | Turns the settled decisions and user stories into `spec.md`: testable success criteria, scope, implementation and testing decisions, boundaries. |
 | `stories` | Writes the user stories for settled work into `stories.md`: one per behavior, each with a concrete example. Skips (with your OK) when nothing observable changes. |
 | `build` | Carries out the approved plan task by task: checks first, one commit per task, a stop at each checkpoint, a fresh-eyes review before the last, and `build.md` with SHAs and deviations. |
