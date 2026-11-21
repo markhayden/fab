@@ -44,6 +44,9 @@ claude -p '/fab:voice <ask>'
 codex exec --skip-git-repo-check '$fab:voice <ask>' </dev/null
 ```
 
+MCP servers that a launcher passes to an interactive session (not in Claude's config) are missing in `claude -p`. For
+the design skill, pass Paper explicitly: `--mcp-config '{"mcpServers":{"paper":{"type":"stdio","command":"~/.paper/bin/paper","args":["mcp"]}}}' --allowedTools mcp__paper`.
+
 `codex exec` prints only the final message; add `--json` to see intermediate messages and commands. It also waits on
 stdin when stdin is open but empty (a background shell), so redirect from `/dev/null`.
 
