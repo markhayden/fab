@@ -14,11 +14,12 @@ fab:review flags these problems; this skill fixes them.
 
 - The target: a **diff** (a fixed point to `HEAD`, such as build's starting SHA) or an **area** (a path, a module, or
   the repo). For an area with no direction given, weight the files recent commits keep touching.
-- The run (`.fab/<YYYY-MM-DD>-<slug>/`): when another step or a recipe calls this, the caller's run (see
-  [Writing during a step](../../docs/conventions.md#writing-during-a-step)); called by a review with no run, skip the
-  file and the ledger and hold both gates in chat. Otherwise start or join one as in
-  [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
-- fab:review records for the target (`review-*.md`): Standards findings that were rebutted as out of scope are candidates.
+- The run (`.fab/<YYYY-MM-DD>-<slug>/`): when another step or a recipe calls this, the caller's run (see [Writing during
+  a step](../../docs/conventions.md#writing-during-a-step)); called (directly or not) by a review with no run, skip the
+  file and the ledger and hold both gates in chat. Otherwise start or join one as in [Starting or joining a
+  run](../../docs/conventions.md#starting-or-joining-a-run).
+- fab:review records for the target (`review-*.md`): Standards findings that were rebutted as out of scope are
+  candidates.
 - The repo's standards (`AGENTS.md`/`CLAUDE.md`, standards and style docs), its checks, and any glossary or decision
   records covering the code. A pattern the standards endorse isn't a candidate; one a decision record settled is
   raised only if the friction is real, and marked as reopening it. Use the glossary's terms in the record.
@@ -67,7 +68,8 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step),
    red check: `git revert --abort`, and report it.
 
 Never mix these commits with feature or fix work, and never weaken a test or check to keep one green. A change
-that would alter behavior isn't a simplification: stop and ask.
+that would alter behavior (such as moving one-off UI onto a shared component that renders differently) is never made
+unpicked: list it at the picks gate as a deepening, with the difference spelled out, and the user decides.
 
 **GATE:** present `simplify-<target>.md` with every commit (each revertable on its own), wait for approval. Offer it
 as a choice (approve, or name what to change), the way fab:grill asks. When another step or a recipe called this in

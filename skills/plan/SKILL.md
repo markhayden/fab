@@ -12,8 +12,10 @@ commit for each, so build can work one task at a time and stop at safe rollback 
 ## Inputs
 
 - The run (`.fab/<YYYY-MM-DD>-<slug>/`): start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
-- `spec.md` from the run, plus `design.md` and `stories.md` when present. An artifact whose approval gate was
-  skipped still counts; one whose step was skipped (`step:` note) doesn't.
+- `spec.md` from the run, plus `design.md` and `stories.md` when present, and, when the run has one, its reuse record
+  (`ui-kit-reuse.md`, or its latest numbered pass, finished first if still in draft) once approved or gate-skipped:
+  tasks name the components and tokens they use and the shared components they create. An artifact whose approval gate
+  was skipped still counts; one whose step was skipped (`step:` note) doesn't.
 - The repo: `AGENTS.md`/`CLAUDE.md` (commands, branch and commit rules), the code the change touches, existing tests.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/plan.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).

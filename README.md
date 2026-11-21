@@ -55,6 +55,7 @@ codex plugin marketplace upgrade fab
 | `debug` | Finds and fixes a bug's root cause: first one fast command that fails on the exact symptom, then a shrunk case, ranked hypotheses, a fix with a regression test, and `debug-<bug>.md`. |
 | `design` | Designs the spec's visual parts in a connected design tool (such as Paper) or from mockups you provide, and indexes them in `design.md`. Skips when there's nothing visual or nothing to design with. |
 | `test` | Verifies a build against its spec and design: traces every criterion to a passing test, fills gaps, rewrites weak tests, checks UI with a browser tool, and writes `tests.md`. Bugs it finds go to `debug`. |
+| `ui-kit` | Keeps UI built from the project's shared components and tokens: tells plan what to reuse, offers one-off UI to `simplify` to become shared components, and syncs the style guide (Storybook, a Paper page) after a run. |
 | `voice` | Writes or rewrites content in your voice, from your private voice profile. Offers to build the profile if you don't have one. |
 
 ## Recipes

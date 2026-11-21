@@ -19,8 +19,8 @@ fab:docs's job.
     listed, ask whether to name commits or check the decisions only;
   - an **audit**: a folder or the whole repo;
   - a **decision** the user names ("write an ADR for …"), or a **term** ("add X to the glossary").
-- The run for any other target: the caller's run when another step or a recipe calls this (see
-  [Writing during a step](../../docs/conventions.md#writing-during-a-step)); called by a review with no run, skip the
+- The run for any other target: the caller's run when another step or a recipe calls this (see [Writing during a
+  step](../../docs/conventions.md#writing-during-a-step)); called (directly or not) by a review with no run, skip the
   file and the ledger and hold both gates in chat. Otherwise start or join one.
 - The repo's internal docs: its agent instructions file (`AGENTS.md` or `CLAUDE.md`), knowledge or notes folders,
   ADRs, the glossary, and committed specs, plans, and architecture notes.

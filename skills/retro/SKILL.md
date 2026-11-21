@@ -35,8 +35,8 @@ this session.
    bug, a weak test, a question asked twice, a long search, a failed or expensive command. No evidence, no candidate.
 2. **Ask what in the environment would have prevented it,** and turn each into one candidate:
    - **Check:** a mistake with a fixed shape (a banned call, an import rule, a file location, a format) becomes a
-     deterministic check: a linter rule, a hook, or a CI job, whichever the repo's tooling makes cheapest. A check
-     that exists but isn't wired in, or is broken, is the finding, not a new one. A repo where no pre-commit hook or CI job
+     deterministic check: a linter rule, a hook, or a CI job, whichever the repo's tooling makes cheapest. A check that
+     exists but isn't wired in, or is broken, is the finding, not a new one. A repo where no pre-commit hook or CI job
      runs any of its test, lint, or typecheck commands is a finding on its own.
    - **Standard:** a judgment call the reviewer caught late or missed becomes a rule in the repo's standards or
      style doc (with none, `CODING_STANDARDS.md` plus a one-line pointer in the agent instructions file); a rule

@@ -13,8 +13,9 @@ command that fails on this bug; without it, every theory is a guess.
 
 - The bug: the user's report, a failing check, or a bug `fab:test` found (with its failing test and output).
 - The run (`.fab/<YYYY-MM-DD>-<slug>/`): when test or review calls this, use the caller's run (see Writing during a
-  step); otherwise start or join one as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
-  Called by a review with no run, the record goes in chat and the guided script's files go in the system temp dir.
+  step); otherwise start or join one as in [Starting or joining a
+  run](../../docs/conventions.md#starting-or-joining-a-run). Called (directly or not) by a review with no run, the
+  record goes in chat and the guided script's files go in the system temp dir.
 - Known-good points for regressions: `build.md`'s starting SHA, an earlier `tests.md` SHA, a release tag.
 - `spec.md` and `design.md` when present (what correct behavior is), the repo's `AGENTS.md`/`CLAUDE.md` (test
   commands, commit rules, hooks), and any glossary or decision records covering the code involved.
@@ -54,23 +55,22 @@ suggest without asking. A blocked debugger or checkout is handled like a blocked
    reported symptom, they are the loop's verdict.
 4. **Shrink it.** Cut inputs, steps, config, and data one at a time, rerunning the loop after each cut against its
    verdict (for an intermittent bug, its recorded rate), until removing anything left makes the command pass.
-5. **Find the cause.** Write 3–5 ranked hypotheses, each with its prediction ("if X is the cause, changing Y makes
-   it pass"); one without a prediction is dropped. Show the list and start on the top one without waiting; the
-   user can rerank or rule some out at any time. Test one variable at a time: a debugger first, then logs at the
-   boundaries that tell hypotheses apart, tagged with this bug's own tag (`[DEBUG-<4 hex>]`, recorded). With an
-   automated loop, a regression between two known points: from a clean tree (ask if it isn't), `git bisect run` with a copy of the
-   command and its test kept outside the tree, exiting 125 on a revision where it can't run (no build, missing
-   fixture), so bisect skips it; always `git
-   bisect reset` after, even when stopped early. Slow, not wrong: measure a baseline and bisect; don't add logs. Keep
-   asking why until the answer is the cause, not the place it shows.
+5. **Find the cause.** Write 3–5 ranked hypotheses, each with its prediction ("if X is the cause, changing Y makes it
+   pass"); one without a prediction is dropped. Show the list and start on the top one without waiting; the user can
+   rerank or rule some out at any time. Test one variable at a time: a debugger first, then logs at the boundaries that
+   tell hypotheses apart, tagged with this bug's own tag (`[DEBUG-<4 hex>]`, recorded). With an automated loop, a
+   regression between two known points: from a clean tree (ask if it isn't), `git bisect run` with a copy of the command
+   and its test kept outside the tree, exiting 125 on a revision where it can't run (no build, missing fixture), so
+   bisect skips it; always `git bisect reset` after, even when stopped early. Slow, not wrong: measure a baseline and
+   bisect; don't add logs. Keep asking why until the answer is the cause, not the place it shows.
 
    **Fast path:** when the step 2 command is already a small test at a seam that exercises the real bug path and
    fails for the reported reason, skip step 4; when one hypothesis is plain from that failure, confirm its
    prediction once and record it as the only one.
 6. **Fix it.**
    - Revert every experiment and debug line first, keeping only the loop itself.
-   - Turn the shrunk case into a regression test, in the suite, at a seam that exercises the real bug path, and see it fail for
-     the reported reason. If no such seam exists, say so in the record: that is a finding, not a reason to test
+   - Turn the shrunk case into a regression test, in the suite, at a seam that exercises the real bug path, and see it
+     fail for the reported reason. If no such seam exists, say so in the record: that is a finding, not a reason to test
      somewhere shallower.
    - Make the smallest change that fixes the cause, not the symptom. Never weaken a test or a check.
    - Run the loop on the unshrunk case. Then clean up: remove every harness you created (never the

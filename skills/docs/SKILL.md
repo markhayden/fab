@@ -17,8 +17,8 @@ Internal docs (knowledge base, ADRs, glossary, agent instructions) are fab:knowl
     [Looking back at a run](../../docs/conventions.md#looking-back-at-a-run); `stories.md` and `spec.md` say what
     users can now do, and its changes say what changed;
   - an **audit**: a folder or the whole repo's public docs, checked against the code.
-- The run for an audit: the caller's run when another step or a recipe calls this (see
-  [Writing during a step](../../docs/conventions.md#writing-during-a-step)); called by a review with no run, skip the
+- The run for an audit: the caller's run when another step or a recipe calls this (see [Writing during a
+  step](../../docs/conventions.md#writing-during-a-step)); called (directly or not) by a review with no run, skip the
   file and the ledger and hold both gates in chat. Otherwise start or join one.
 - The repo's public docs: README files, a docs site or guides folder, API reference (including doc comments on
   exported code), the changelog, and examples. Its existing style (headings, tone, changelog format) is the model.
@@ -31,23 +31,23 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step),
 [Committing during a step](../../docs/conventions.md#committing-during-a-step), and
 [Picks](../../docs/conventions.md#picks): save `docs-<target>.md` after every exchange.
 
-1. **Find what's wrong.** Work on the branch holding the run's commits (an audit: the current branch), at `HEAD`
-   with a clean tree; ask otherwise. Check every public doc's claims (commands, flags, options, outputs, examples, API
+1. **Find what's wrong.** Work on the branch holding the run's commits (an audit: the current branch), at `HEAD` with a
+   clean tree; ask otherwise. Check every public doc's claims (commands, flags, options, outputs, examples, API
    signatures and errors) against the code: for a run, what its changes could affect; for an audit, everything in the
    area; an audit also checks that the README says what the project is, how to install and run it, its commands, how
    it's put together at a glance, and how to contribute, and that exported APIs document parameters, returns, and
-   errors; whatever an audit finds missing is proposed at the picks gate, never added directly. A doc that's right while the code is
-   wrong is a bug: report it and offer fab:debug; this skill only edits docs.
+   errors; whatever an audit finds missing is proposed at the picks gate, never added directly. A doc that's right while
+   the code is wrong is a bug: report it and offer fab:debug; this skill only edits docs.
 2. **Find what's missing** (run target only): something a user can now do or must now know (a new flag, endpoint,
    setting, behavior change, or a breaking change and how to move past it) that no public doc covers. Code the run
    didn't touch is out of scope.
-3. **Write it** in the repo's own style, where its readers already look. Fixing something wrong is always direct,
-   even when the fix adds text, and so is a run's addition inside an existing section. A new page, a new top-level
-   README section, or anything an audit found missing waits for picks. Additions go in the section that covers the area; doc comments go
-   next to the exported code, with parameters, returns, and errors; a run's user-visible change gets a changelog
-   entry when the repo keeps a changelog (never start one). Say what a user does and sees, with a real example. Then compare each
-   edited doc with its original, the code, and the run's spec and decisions: cut filler, keep every fact, number, and caveat, and flag any claim
-   nothing supports.
+3. **Write it** in the repo's own style, where its readers already look. Fixing something wrong is always direct, even
+   when the fix adds text, and so is a run's addition inside an existing section. A new page, a new top-level README
+   section, or anything an audit found missing waits for picks. Additions go in the section that covers the area; doc
+   comments go next to the exported code, with parameters, returns, and errors; a run's user-visible change gets a
+   changelog entry when the repo keeps a changelog (never start one). Say what a user does and sees, with a real
+   example. Then compare each edited doc with its original, the code, and the run's spec and decisions: cut filler, keep
+   every fact, number, and caveat, and flag any claim nothing supports.
 4. **Prove it.** Run every command and example you wrote or touched, and every one whose shown output you wrote or
    touched, in a scratch copy when it changes local state, and compare the output with the doc. Anything that
    can't run here (it needs a service, credentials, or a device), reaches outside the scratch copy (a deploy, an
