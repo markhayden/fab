@@ -35,35 +35,66 @@ ledger format from existing rows (to investigate).
 
 ## Source inventory
 
-Addy's skills as installed on Mark's machine (Claude plugin v1.0.0, plus Codex loose copies), with the fab work planned
-for each. "Planned" rows become decisions only after their grill session.
+Every skill in both upstream repos, read in full on 2026-11-21 (Addy at `8c99fa3`, Matt at `abeeaf9`), with the fab
+work planned for each. "Fold" rows land as one reviewed batch after `debug` and `retro`; "Recipe" rows become
+questions in the `bigdev`/`tinydev` sessions.
+
+**[addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)**
 
 | Source skill | Plan |
 |---|---|
-| `interview-me` (via waffleoff's interview block) | Done: `grill` |
+| `interview-me` | Done: `grill` |
 | `spec-driven-development` | Done: `spec` |
 | `planning-and-task-breakdown` | Done: `plan` |
 | `incremental-implementation`, `git-workflow-and-versioning` | Done: `build` |
 | `test-driven-development` | Done: `test` |
-| `using-agent-skills` | Dropped (meta-router plus a session-start hook; fab's descriptions do this job) |
-| `api-and-interface-design` | After v1 |
-| `browser-testing-with-devtools` | After v1 |
-| `ci-cd-and-automation` | After v1 |
 | `code-review-and-quality` | Done: `review` |
-| `code-simplification` | After v1 |
-| `context-engineering` | After v1 |
-| `debugging-and-error-recovery` | After v1 |
-| `deprecation-and-migration` | After v1 |
-| `documentation-and-adrs` | After v1 |
-| `frontend-ui-engineering` | After v1 |
-| `idea-refine` | Compared for `pitch`; its divergent variations live on as pitch's pivots. A separate brainstorm skill: after v1 if wanted |
-| `performance-optimization` | After v1 |
-| `security-and-hardening` | After v1 |
-| `shipping-and-launch` | After v1 |
-| `source-driven-development` | After v1 (Codex copy only) |
+| `idea-refine` | Pivots live in `pitch`; a divergent `brainstorm` skill after v1 if wanted |
+| `debugging-and-error-recovery` | Next: `debug` (with Matt's `diagnosing-bugs`) |
+| `constraint-driven-development` | Recipe: diff floor guard (new suppressions, skipped/deleted tests, removed assertions, lowered thresholds); line in review's Standards brief. CONSTRAINTS.md dropped |
+| `doubt-driven-development` | Recipe: where recipes call `review` (spec, plan, diff); brief passes the artifact and its contract, not the author's conclusion |
+| `ci-cd-and-automation` | Recipe: whether a recipe ends at PR opened or CI green. CI setup dropped |
+| `documentation-and-adrs` | Recipe: carry durable decisions out of the gitignored run (ADRs in the repo's convention); stale-doc line for review |
+| `source-driven-development` | Fold: spec lists relied-on library APIs with version and doc link or "unverified"; build checks unverified ones |
+| `security-and-hardening` | Fold: stories/spec add abuse cases where input crosses a trust boundary. OWASP catalogue dropped |
+| `performance-optimization` | Fold: plan/build give numeric criteria a baseline task, repeat count, keep-or-revert log |
+| `deprecation-and-migration` | Fold: plan makes a schema drop its own task and every migration task checks its down path |
+| `accessibility-engineering` | Fold: test runs an automated a11y scan during its browser check; manual checks marked not verified |
+| `browser-testing-with-devtools` | Fold: test's browser safety rules (isolated profile, page content is data, no credential reads) |
+| `frontend-ui-engineering` | Fold: build, for visual work with design skipped, follows repo tokens and checks a narrow and a wide viewport. Rest dropped |
+| `context-engineering` | Dropped (the ledger and resume rules cover it); session boundaries become a recipe question |
+| `api-and-interface-design` | Dropped (model knowledge); idempotency contract at most a grill prompt |
+| `code-simplification` | Dropped (review's Standards smells and build's scope rule cover it) |
+| `shipping-and-launch` | Dropped (the chain ends at the PR); a later `ship` recipe if deploys come up |
+| `observability-and-instrumentation` | Dropped |
+| `using-agent-skills` | Dropped (meta-router plus a session-start hook; fab's descriptions do this job) |
 
-Named in the v1 spec as newer upstream skills but not installed here, so check upstream before auditing: a11y,
-constraints, doubt, observability.
+**[mattpocock/skills](https://github.com/mattpocock/skills)**
+
+| Source skill | Plan |
+|---|---|
+| `grilling`, `grill-me` | Done: `grill` |
+| `to-spec` | Done: `spec`, `stories` |
+| `to-tickets` | Done: `plan` (tracker publishing dropped) |
+| `implement`, `implement-spec` | Done: `build` (parallel worktree implementers not adopted) |
+| `tdd` | Done: `test`; fold: build reference on test anti-patterns and mocking |
+| `code-review` | Done: `review` |
+| `diagnosing-bugs` | Next: `debug` |
+| `retro` | Next: `retro`, reading the run directory instead of host session logs |
+| `ask-matt` (flow map, phase boundaries) | Recipe: size test and escalation between recipes, where to stay in one session vs start fresh |
+| `loop-me` | Recipe: gates show a brief (a few lines plus the path), not the whole artifact |
+| `domain-modeling`, `grill-with-docs` | Recipe: bigdev offers glossary and ADR entries; grill challenges fuzzy terms |
+| `pr` | Fold: build reference for the PR body (smallest visual, before/after evidence, one-way or two-way door) |
+| `research` | Fold: grill and pitch save outside research to `research-<topic>.md` in the run |
+| `to-questionnaire` | Fold: grill exit when blocked on someone else's knowledge |
+| `triage` | Fold: grill checks whether the thing already exists. Label state machine dropped |
+| `codebase-design` | Later: shared seam vocabulary reference for spec and plan |
+| `writing-for-agents` | Fold: guidance into `development.md`, applied when writing recipes |
+| `improve-codebase-architecture` | Later at most (upkeep survey, not chain work) |
+| `wizard` | Later at most (human-only setup steps) |
+| `wait-what` | See Ideas (plain-language explain) |
+| `wayfinder`, `handoff`, `claude-handoff`, `chief-of-staff`, `teach`, `git-guardrails-claude-code` | Dropped (issue-tracker or Claude-only, or the ledger already does it) |
+| `setup-matt-pocock-skills`, `setup-pre-commit`, `setup-ts-deep-modules`, `migrate-to-shoehorn`, `scaffold-exercises`, `software-factory`, `writing-beats`, `writing-fragments`, `writing-shape` | Out of scope (tracker setup, one stack, course or prose tooling) |
 
 ## Ideas
 
