@@ -3,8 +3,8 @@
 Read this when picking the reviewer in `review`. The reviewer is the *other* host's agent: from Claude Code, use
 Codex; from Codex, use Claude Code. Run it from the repo root, read-only, one fresh process per reviewer per round.
 
-Write the brief to a temporary file first (outside the repo, e.g. the system temp dir) and pass it as the prompt, so
-quoting can't break it.
+Write the brief to a temporary file first and pass it as the prompt, so quoting can't break it. Use the system temp
+dir; if writes there are blocked (a sandbox), use `.fab/<run>/.review-tmp/`, which git already ignores.
 
 ## From Claude Code: Codex
 
