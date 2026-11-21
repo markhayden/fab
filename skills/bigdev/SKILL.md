@@ -13,11 +13,9 @@ gate, shipping, and the retro offer. Begin your first reply with `[bigdev]` and 
 
 ## Steps
 
-Start or join the run as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run); when
-bigdev first takes the run, append a `bigdev` `started` row for `bigdev.md`. Resuming, the next action is the first row
-below not yet settled, re-presenting drafts and changed approved artifacts as conventions' Resume says. Row 1 is
-settled when the run has no pitch or its pitch was sold; rows 10 and 12–14 once their record waits at the closing
-gate. Run each skill as written; the table says only what bigdev adds.
+Start or join the run as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run), and run it
+as [Running a recipe](../../docs/conventions.md#running-a-recipe) says. Row 1 is settled when the run has no pitch or
+its pitch was sold. Run each skill as written; the table says only what bigdev adds.
 
 | # | Step | Skill | Gate | bigdev adds |
 |---|---|---|---|---|
@@ -37,44 +35,21 @@ gate. Run each skill as written; the table says only what bigdev adds.
 | 14 | Style guide | fab:ui-kit (sync) | picks kept; final at 15 | Work with no UI: a `skipped` row, `step: no UI`. |
 | 15 | Closing | bigdev | kept | Below. |
 | 16 | Retro | fab:retro | picks and final kept | Offered once; if taken, run on this run, so its commits ship with the rest. |
-| 17 | Ship | build's push and PR offer | when debug ran | The offer's answer and then CI (Rules). |
+| 17 | Ship | build's push and PR offer | when CI needed debug | Publishing and CI as Running a recipe says. |
 
 **GATE:** after steps 10–14, the closing brief in `bigdev.md` (the simplify, knowledge, docs, and ui-kit sync records
 that ran, with commits and anything unverified), wait for approval. Settling it settles each record it presented, as
 their caller's gate (see [Writing during a step](../../docs/conventions.md#writing-during-a-step)).
 
-**GATE:** after step 17, when it called fab:debug, `bigdev.md` with the PR link and the CI outcome and those debug
-records, wait for approval. Otherwise the PR link (or the user's choice not to push) and the CI outcome are recorded
-without a stop. Then append bigdev's `approved` row for `bigdev.md`, which ends the run.
-
-`bigdev.md` follows the several-gates rule in Writing during a step: a `draft` row at the closing gate and a `started`
-row when it's approved, a `draft` row at the ship gate when it's held, and `approved` at the end. A deferred step's
-`draft` row says in its note which gate it waits at. It records the fit check, both briefs, the retro
-answer, the publish answer, each push, and the CI outcome (owed again after a fix push); with no one to answer, stop
-with the pending item saved there.
+**GATE:** after step 17, when a CI failure there called fab:debug, `bigdev.md` with the PR link, the CI outcome, and
+those debug records, wait for approval.
 
 ## Rules
 
 - Personal override: if `~/.config/fab/skills/bigdev.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
-- **Child overrides** follow [Personal layer](../../docs/conventions.md#personal-layer), for every skill bigdev runs
-  and the ones they call (review, debug, ui-kit setup), in a fresh session or sub-agent too.
-- **Gates show a brief:** 3 to 6 lines on what was decided or done, what changed since the last gate, what the agent
-  is least sure of, and any open review disputes, then the artifact's path; a picks gate also lists its numbered
-  candidates. The full artifact only when asked.
-- **Fit check, after grill:** a small, clear change with nothing left to settle: offer the lighter `tinydev` recipe
-  when this fab has it. Several unrelated outcomes, or more than one run can carry: offer to split into runs, each
-  starting at grill with its share of `grill.md`. Accepting either ends this run with bigdev's `skipped` row
-  (`step: moved to <run>`); any other case, or a declined offer, records "fits" and goes on. Nothing settled is lost.
-- **Reviewed artifacts stay reviewed:** a spec or plan changed after its review, at its gate or later, gets a review
-  round on the change before it's approved.
-- **Code after test:** a commit that changes code after test's approval (from a change asked for at the closing
-  gate) sends the run back through test before the closing gate is approved.
+- **Fit check, after grill:** a small, clear change (not offered when the run came from tinydev's size check) with
+  nothing left to settle: offer fab:tinydev. Several unrelated outcomes, or more than one run can carry: offer to split
+  into runs, each starting at grill with its share of `grill.md`. Accepting either moves the run (Running a recipe); any
+  other case, or a declined offer, records "fits" in `bigdev.md` and goes on. Nothing settled is lost.
 - **Sessions:** grill through plan stay in one session; after plan's approval and each build checkpoint, suggest
   starting fresh, since the next session resumes from the ledger.
-- **Publishing:** before any push or PR, check the remote and existing PRs so nothing is published twice, and record
-  each push and PR in `bigdev.md` as it lands.
-- **CI:** after the PR opens, if the repo's CI status can be read, wait for the run on the PR's latest commit. A
-  failure goes to fab:debug, called from step 17; once its record shows the fix verified, push it to the PR and wait
-  for the new run. Resuming, compare the git log with the PR before reading CI, so a verified fix that wasn't pushed
-  yet is pushed first. A check is
-  never disabled to get green. A run that's missing, cancelled, or unreadable is recorded as such.

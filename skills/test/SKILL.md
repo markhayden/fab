@@ -25,7 +25,8 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
 
 1. **Start at the build's end.** First time: `HEAD` is build's final SHA, or that SHA followed only by commits this
    run's simplify records list (check the git log against them), and the tree is clean; record it as the baseline.
-   Resuming: `HEAD` is the latest SHA in `tests.md`. Otherwise ask. Never edit the approved `build.md`.
+   Resuming: `HEAD` is the latest SHA in `tests.md`. Sent back by a recipe after later commits: the new `HEAD`, with a
+   clean tree, is the baseline. Otherwise ask. Never edit the approved `build.md`.
 2. **Trace.** For every spec criterion, find the tests that prove it (start from `build.md`'s Checks), and read
    them: a test proves a criterion only if it asserts that behavior through the spec's seam. A criterion the plan
    proves with a user-run check is traced to that check instead, and gets no gap test.

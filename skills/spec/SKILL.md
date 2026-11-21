@@ -22,16 +22,17 @@ from one source instead of the chat. It synthesizes what's settled; it doesn't i
 
 Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
 
-1. **Load what's settled.** Every decision in `grill.md` and every story in `stories.md` is carried as written; don't
-   reopen one. Read grill's Handed off and Open sections too: settle choices handed to `spec` (within step 2's
-   limits), and keep choices handed to later steps with their owner. Implementation decisions record what's
-   settled; they don't do design's or plan's work. Ask only when settled requirements conflict with each other or
-   with a binding repo constraint. Current behavior that the change replaces is not a conflict.
+1. **Load what's settled.** Every decision in `grill.md` and every story in `stories.md` (unless its step was skipped)
+   is carried as written; don't reopen one. Read grill's Handed off and Open sections too: settle choices handed to
+   `spec` (within step 2's limits), and keep choices handed to later steps with their owner. Implementation decisions
+   record what's settled; they don't do design's or plan's work. Ask only when settled requirements conflict with each
+   other or with a binding repo constraint. Current behavior that the change replaces is not a conflict.
 2. **Fill gaps only if they block.** If either file is missing, use whichever exists, plus the conversation and the
-   repo. Ask at most three questions in total, only about gaps that would change a success criterion, using
-   [grill's Asking rules](../grill/SKILL.md#asking). If more remain, offer to run fab:grill or fab:stories first. A stories row `skipped` with
-   `step: no observable behavior change` is not missing: cite grill's requirements instead.
-   Never assume an answer that changes a success criterion; record any other assumption under Assumptions.
+   repo. Ask at most three questions in total, only about gaps that would change a success criterion, using [grill's
+   Asking rules](../grill/SKILL.md#asking). If more remain, offer to run fab:grill or fab:stories first. A stories row
+   `skipped` with a `step` note (no observable change, or a recipe that skips it) is not missing: cite grill's
+   requirements instead. Never assume an answer that changes a success criterion; record any other assumption under
+   Assumptions.
 3. **Write success criteria** and map each to what it proves: story IDs (`S1, S3`) when `stories.md` exists and
    its step wasn't skipped (`step:` note), otherwise the settled requirement in plain words. Stories under Removed aren't
    requirements. Never invent stories or IDs. Misuse stories become criteria like any other.

@@ -261,6 +261,49 @@ linked worktrees, and is harmless outside git.
 
 Never edit a tracked `.gitignore` for this.
 
+## Running a recipe
+
+For every recipe (`bigdev`, `tinydev`), on top of each step's own skill:
+
+- **Its record.** A recipe keeps `<recipe>.md` in the run for what's its own (checks it makes, its gates, shipping, the
+  retro answer). When it first takes the run it appends a `<recipe>` `started` row for that file; the file follows the
+  several-gates rule (a `draft` row at each recipe gate, a `started` row when an intermediate one is approved), and its
+  `approved` row, appended once its last step is done, closes the run. Handing the run to another recipe, or splitting
+  it, ends it with a `skipped` row (`step: moved to <run> (<recipe>)`). Every question the recipe asks, and its answer
+  or a declined offer, is saved in the record as it happens; with no one to answer, stop there.
+- **Resume.** The next action is the first row of the recipe's Steps table not yet settled, re-presenting drafts and
+  changed approved artifacts as Resume says. A step whose final gate the recipe defers to a later gate counts as settled
+  once its record waits there (later steps read it as gate-skipped until then); that `draft` row's note names the gate
+  it waits at. A step the recipe skips is a `skipped` row: `gate: <recipe>` when the work was done without its approval,
+  `step: <recipe>` when it wasn't owed. When another recipe takes the run, rows the first recipe skipped with its own
+  note that the new recipe's table owes are owed again (a `step` skip runs, a `gate` skip or a `draft` waiting at the
+  first recipe's gate is presented at the new recipe's gate for that step); an artifact the new recipe reviews but the
+  first didn't gets that review and its gate again; anything after a restored or changed step is re-presented after it,
+  rerun if its inputs changed; and the handoff offer isn't made back to the recipe the run came from.
+- **Gates show a brief,** offered as the step's own choice (approve or name a change; picks and verdicts as their skills
+  say): 3 to 6 lines on what was decided or done, what changed since the last gate, what the agent is least sure of, and
+  any open review disputes, then the artifact's path; a picks gate also lists its numbered candidates. The full artifact
+  only when asked.
+- **Child overrides** follow [Personal layer](#personal-layer), passing each one's path, for every skill the recipe runs
+  and the ones they call (review, debug, ui-kit setup), in a fresh session or sub-agent too.
+- **Reviewed artifacts stay reviewed:** an artifact changed after its review, at its gate or later, gets a review round
+  on the change before it's approved.
+- **Code after review or test:** product code committed after build's review or debug's fix (simplify's commits, changes
+  asked for at a later gate) gets a review round on those commits (`review-followup.md`, numbered per pass, reviewing
+  from the last SHA a review covered), called from the recipe's closing or end step and shown in its brief; then, since
+  review's fixes count too, product code committed after test ran sends the run back through test from the new `HEAD` (a
+  `started` test row notes it). Both happen before the closing or end gate is approved. Tests that test itself commits,
+  and fixes debug verified, need neither. On a bug-fix run, debug's loop and the repo's checks take test's place. After
+  that gate, CI fixes are verified by debug as written.
+- **Publishing:** build's push and PR offer waits for the recipe's ship step (on a bug-fix run, the recipe makes the
+  same offer). Before any push or PR, check the remote and existing PRs so nothing is published twice, and record each
+  push, the PR, and the offer's answer in the record.
+- **CI:** after the PR opens, if the repo's CI status can be read, wait for the run on the PR's latest commit. A failure
+  goes to fab:debug, called from the ship step; once its record shows the fix verified, push it and wait for the new
+  run. Resuming, compare the git log with the PR before reading CI, so a verified fix not yet pushed goes first. A check
+  is never disabled to get green; a run that's missing, cancelled, or unreadable is recorded as such. The ship gate is
+  held only when a CI failure called debug; otherwise the PR and CI outcome are recorded without a stop.
+
 ## Using a browser
 
 When a skill drives a browser (build's viewport look, test's UI check, docs' examples):

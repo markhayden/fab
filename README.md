@@ -65,8 +65,7 @@ Recipes are call-only: they run only when you name them (`/fab:bigdev` in Claude
 | Recipe | What it does |
 |---|---|
 | `bigdev` | The full flow, from interview to an open pull request: grill, stories, spec (reviewed), UI reuse, design, plan (reviewed), build (reviewed), simplify, test, then internal docs, public docs and style guide upkeep at one closing gate, a retro offered, then the PR with CI watched. |
-
-`tinydev`, a lighter flow for small, clear changes, is in progress.
+| `tinydev` | The light flow for small, clear changes: questions only for real gaps, a short spec you approve, then plan, build (reviewed), simplify, test, and the same docs and style guide upkeep, all shown at an end gate, then the PR with CI watched. Bug reports go through `debug`. Offers to hand over to `bigdev` when the work turns out bigger. |
 
 ## Make it yours
 
