@@ -14,6 +14,7 @@ from one source instead of the chat. It synthesizes what's settled; it doesn't i
 - The run (`.fab/<YYYY-MM-DD>-<slug>/`): start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
 - `grill.md` (intent and decisions) and `stories.md` (user stories) from the run, plus anything settled in the conversation.
 - The repo: its `AGENTS.md`/`CLAUDE.md`, docs, tests, and the code the change touches.
+- The repo's glossary when present (its terms are the spec's terms).
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/spec.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
@@ -33,11 +34,14 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
    Never assume an answer that changes a success criterion; record any other assumption under Assumptions.
 3. **Write success criteria** and map each to what it proves: story IDs (`S1, S3`) when `stories.md` exists and
    its step wasn't skipped (`step:` note), otherwise the settled requirement in plain words. Stories under Removed aren't
-   requirements. Never invent stories or IDs.
+   requirements. Never invent stories or IDs. Misuse stories become criteria like any other.
 4. **Pick test seams.** For each criterion, propose the outermost existing public boundary that can verify it (a
    CLI's output, an HTTP API, a public function); choose per criterion before merging shared seams. If a criterion
    needs a new harness or public interface, ask before writing it in, since that adds work. A harness is new when
    no test in the project drives that boundary yet (for example, the first test that runs the built CLI).
+5. **Name what the work relies on.** Each library, framework, or external service API an implementation decision depends
+   on is listed with its version (from the lockfile or manifest, or "version unknown") and a link to that version's
+   docs, or marked "unverified" for build to check.
 
 **GATE:** present `spec.md`, wait for approval. Offer it as a choice (approve, or name what to change), the way
 grill asks.
@@ -52,7 +56,7 @@ grill asks.
 - **Scope** and **Out of scope.** Out of scope is never empty.
 - **Implementation decisions:** modules, interfaces, data shapes, contracts, behaviors. No file paths or code;
   those go stale. The exception is a short snippet that states a decision more precisely than prose can (a type
-  shape, a schema).
+  shape, a schema). The APIs relied on, as step 5 lists them.
 - **Testing decisions:** a table of criterion → seam → existing or new, plus prior art to copy.
 - **Boundaries:** always, ask first, never, for whoever builds it.
 - **Assumptions:** what you assumed instead of asking. Empty when everything came from upstream.

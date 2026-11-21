@@ -25,12 +25,15 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
    operators, maintainers, CI, other programs. Ask before writing only when who it's for, or what they'd do, is
    unclear, using [grill's Asking rules](../grill/SKILL.md#asking). With no `grill.md`, ask only those questions; if
    the intent itself is unsettled, offer to run fab:grill first.
-2. **Nobody notices?** For a change no one can observe (a pure refactor, an internal swap), don't stretch stories to
-   fit. Propose skipping. On approval, append a `skipped` row with the note `step: no observable behavior change`
-   and end the step: no `stories.md`, no gate. spec then works from grill's requirements.
+2. **Nobody notices?** For a change no one can observe (a pure refactor, an internal swap) and that crosses no trust
+   boundary (step 3), don't stretch stories to fit. Propose skipping. On approval, append a `skipped` row with the note
+   `step: no observable behavior change` and end the step: no `stories.md`, no gate. spec then works from grill's
+   requirements.
 3. **Write one story per distinct behavior,** including what happens when it goes wrong (bad input, nothing to show,
    can't run). Merge variations of the same behavior instead of listing each one. Never add a story for behavior
-   that's out of scope or still unsettled; list it under Not covered instead.
+   that's out of scope or still unsettled; list it under Not covered instead. Where the work crosses a trust boundary
+   (input coming in, data going out, auth, an external fetch, a destructive path), add a misuse story for each
+   distinct way it can be abused there: what a hostile or careless actor does, and what happens.
 4. **Give each story one concrete example:** real-looking input and what the person sees, specific enough that a
    reader can tell whether a spec covers it.
 

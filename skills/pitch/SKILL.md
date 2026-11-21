@@ -24,7 +24,8 @@ sharper idea and why it's worth building, or why it isn't.
 Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step): save `pitch.md` after every exchange.
 
 1. **Get the facts first.** A number you can't confirm is labeled a guess and says what it's based on; one with no
-   basis at all stays out.
+   basis at all stays out. Research from outside the repo goes in a research file (see
+   [Runs and handoff artifacts](../../docs/conventions.md#runs-and-handoff-artifacts)).
 2. **Pitch the strongest true version,** on one screen:
    - **Problem:** what's wrong today, in one or two lines.
    - **For:** who exactly.

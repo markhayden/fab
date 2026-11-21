@@ -16,6 +16,7 @@ Report:
 (c) requirements that look done but are done wrong.
 Quote the upstream line for each finding and give the exact place in the target (file:line or section).
 Label each finding bug, gap, or nit. Most important first. Under 400 words. If you find nothing, say so.
+Judge the target against what it answers to, not against any summary of it the author may have written.
 ```
 
 ## Standards reviewer
@@ -35,12 +36,17 @@ Report:
     if/switch over the same cases in several places; one change scattered across many files; one file
     changed for unrelated reasons; abstraction or options nothing needs yet; long chains of calls through
     other objects; wrappers that only pass calls along; and needless complexity overall.
+(c) anything in the diff that lowers the bar: a new suppression (lint, type, coverage, secret scanning), a skipped or
+    deleted test, an assertion removed from a test that remains, a threshold weakened (a minimum lowered or a maximum
+    raised), a stub, empty catch, or TODO standing in
+    for behavior. Each one is a finding unless a written repo standard allows it.
 A written repo standard beats a smell: if the repo endorses it, don't flag it. Skip a rule a check enforces only
 if that check passed; a failing check is itself a finding. Label each finding bug, gap, or nit, with the exact place. Under 400 words.
 ```
 
 The smell list adapts the code-smell baseline in Matt Pocock's `code-review` skill (MIT), itself drawn from
-Fowler's *Refactoring*.
+Fowler's *Refactoring*. The bar-lowering check (c) adapts Addy Osmani's `constraint-driven-development`, and
+judging the work against its contract rather than the author's summary adapts his `doubt-driven-development` (MIT).
 
 ## History block (round 2 onward)
 

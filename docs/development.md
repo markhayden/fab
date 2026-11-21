@@ -64,7 +64,7 @@ Verified on Claude Code 2.1.329 and Codex CLI 0.170.0.
 ## Versioning
 
 The version lives only in `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`; the check fails if they differ.
-Bump on every shipped change: patch for wording, minor for a new skill or recipe, major for a rename or removal.
+Bump on every shipped change, as `conventions.md` Versioning says.
 
 The bump is what makes Claude update. Tested 2026-11-20 with a fixture plugin (Claude from a local-path marketplace,
 Codex from a git URL), changing content at the same version, then with a bump:
@@ -95,3 +95,17 @@ Every skill goes through a grill session (see `skill-audit.md`):
 5. Test it live in both hosts.
 6. Log the decision and evidence in `skill-audit.md`.
 7. Run the check, bump the version, commit.
+
+### Writing a skill body
+
+On top of conventions' "Writing the body":
+
+- **End every step on a completion criterion** the agent can check, and make it exhaustive ("every criterion maps
+  to a test") rather than vague ("understanding reached"); a vague end invites stopping early.
+- **One meaning, one place.** A rule two skills share lives in `conventions.md` and both link to it.
+- **Leading words.** Where a phrase keeps spelling out one idea, name it once with a word the model already knows
+  (a *tight* loop, a *seam*, a *picks gate*) and reuse the word.
+- **Say what to do, not what to avoid.** A prohibition puts the unwanted behavior in front of the model; state the
+  wanted one, and keep "never" for real hard lines.
+
+Adapted from Matt Pocock's `writing-for-agents` skill ([mattpocock/skills](https://github.com/mattpocock/skills), MIT).

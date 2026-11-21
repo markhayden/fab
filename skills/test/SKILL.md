@@ -26,8 +26,11 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
 1. **Start at the build's end.** First time: `HEAD` is build's final SHA and the tree is clean; record it as the
    baseline. Resuming: `HEAD` is the latest SHA in `tests.md`. Otherwise ask. Never edit the approved `build.md`.
 2. **Trace.** For every spec criterion, find the tests that prove it (start from `build.md`'s Checks), and read
-   them: a test proves a criterion only if it asserts that behavior through the spec's seam.
-3. **Run everything** at this SHA: the full suite, each task's Verify command, and the repo's own checks. A test
+   them: a test proves a criterion only if it asserts that behavior through the spec's seam. A criterion the plan
+   proves with a user-run check is traced to that check instead, and gets no gap test.
+3. **Run everything** at this SHA: the full suite, each task's Verify command, and the repo's own checks (a user-run
+   check takes the result `build.md` recorded at its checkpoint only if nothing it covers changed since; otherwise
+   ask the user to rerun it, and with no answer it's not verified). A test
    that flips between runs is flaky; record it as weak. Record every failure with its output; an unexplained
    failure anywhere in the suite means the verdict isn't a pass, even if every criterion's tests pass.
 4. **Fill gaps.** A criterion with no real test gets one, written at the spec's seam, with its expected values
@@ -35,14 +38,18 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
    bug: commit nothing failing, report it with the test and its output, and offer to fix it with fab:debug
    (its record goes to this gate) as a logged deviation. The same goes for any failure step 3 traces to product
    code. Never change product code unasked.
-5. **Weak tests.** Check this run's tests for ones that can't fail (the expected value is computed the way the code
-   computes it), test internals instead of behavior, mock what could be real, or depend on timing or order.
-   Rewrite those; commit only rewrites that pass, and treat one that exposes a bug like a failing gap test.
-   Weak tests older than the run go under Noticed, untouched.
-6. **Check UI against the design** when `design.md` exists and a browser tool is available: every Screens row,
-   Described item, and Left to build item (using the choice `build.md` recorded). Compare each with the design
-   and check the console is clean. A mismatch is a bug, handled as in step 4. No browser tool: list each as not verified.
-7. **After any commit here,** rerun everything from step 3 and record the final verified SHA in `tests.md`.
+5. **Weak tests.** Check this run's tests against [../build/references/tests.md](../build/references/tests.md), and for
+   flakiness (timing or order). Rewrite those; commit only rewrites that pass, and treat one that
+   exposes a bug like a failing gap test. Weak tests older than the run go under Noticed, untouched.
+6. **Check UI against the design** when `design.md` exists and a browser tool is available: every Screens row, Described
+   item, and Left to build item (using the choice `build.md` recorded). Compare each with the design and check the
+   console is clean, following [Using a browser](../../docs/conventions.md#using-a-browser). With an accessibility
+   scanner available (axe or similar), scan each screen: critical and serious findings are bugs; a scan that produces no
+   valid report, or no scanner, leaves accessibility not verified (listed with the verdict), as are keyboard and
+   screen-reader checks the agent can't do. A mismatch is a bug, handled as in step 4. No browser tool: list each as not
+   verified.
+7. **After any commit here,** rerun everything from step 3, and step 6's checks for any screen a commit could affect
+   (its own files, or shared styles, components, or routes it uses), and record the final verified SHA in `tests.md`.
 
 **GATE:** present `tests.md`, wait for approval. Offer it as a choice (approve, or name what to change), the way
 grill asks.
@@ -54,16 +61,19 @@ Commits for any tests added or rewritten (and fixes the user approved, made by f
 - **Revision:** the baseline SHA, the final verified SHA, and the commands run with their totals.
 - **Verdict:** pass, or pass with failures the user accepted, or not passing; plus anything not verified.
 - **Criteria:** a table of spec criterion → tests that prove it (name and location) → result.
-- **Design:** a table of screen or state → how it was checked → result, or "not verified" with the reason.
+- **Design:** a table of screen or state → how it was checked → result, including its accessibility scan, or "not
+  verified" with the reason.
 - **Gaps filled:** each new test, the criterion it covers, and its SHA.
-- **Bugs found:** each with its failing test, output, what the user decided, and its `debug-<bug>.md` when fixed.
+- **Bugs found:** each with its failing test (or, for a console, design, or accessibility bug, what was observed),
+  output, what the user decided, and its `debug-<bug>.md` when fixed.
 - **Weak tests:** rewritten tests, with SHAs.
 - **Noticed:** older weak tests and other findings outside the run, untouched.
 - **Deviations:** each fix the user approved, why, and its SHA.
 
 ## Done when
 
-- Every spec criterion maps to at least one test that passes at the recorded SHA, or to a bug the user decided on.
+- Every spec criterion maps to at least one test that passes at the recorded SHA (or a user-run check with a current
+  result, or listed not verified when the user couldn't rerun it), or to a bug the user decided on.
 - Every design item is checked or marked not verified with a reason.
 - The suite and repo checks pass at the final verified SHA, or each failure has the user's decision.
 - The ledger shows `started`, `draft`, then `approved` with the mtime (or `skipped` with a `gate` note when a recipe

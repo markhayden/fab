@@ -4,8 +4,8 @@ Read this when a bug only reproduces through steps a person has to take (a login
 dashboard). With no run, use the system temp dir instead of `.fab/<run>/`.
 
 1. Copy the script to `.fab/<run>/human-loop-<bug>.sh` and edit only the marked block: a `step` for each action, a
-   `capture` for each observation, each prompt in single quotes (an apostrophe is written `'\''`). Capture what the user saw, never a secret: a
-   sign-in is a `step`.
+   `capture` for each observation, each prompt in single quotes (an apostrophe is written `'\''`). Capture what the user
+   saw, never a secret: a sign-in is a `step`.
 2. Ask the user to run `bash .fab/<run>/human-loop-<bug>.sh` in their own terminal. It prompts them and appends
    each answer to `.fab/<run>/human-loop-<bug>.out` under a dated header, so earlier runs are kept. Ask them not to
    paste secrets.

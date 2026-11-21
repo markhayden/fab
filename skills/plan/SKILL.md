@@ -33,15 +33,22 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
    tasks, even when they'd fit one session together, so every commit is a working rollback point; one behavior is
    one task, never split. Exceptions: a prefactor shows structural progress instead, with existing checks staying
    green; a rename or retype that breaks every caller at once goes expand (add the new form beside the old),
-   migrate callers in batches, then contract (remove the old form).
+   migrate callers in batches, then contract (remove the old form). For a schema change, dropping the old form is its
+   own task after a checkpoint, and a reversible migration task's checks include its down path (an irreversible one
+   gets rollback steps, step 4).
 3. **Prove each task.** Its checks must fail before the work and pass after; a check that already passes proves
-   nothing (a prefactor's checks are the existing ones, still passing). Use the seam the spec's Testing decisions
+   nothing (a prefactor's checks are the existing ones, still passing; baseline, guard, and user-run checks prove
+   themselves as below). Use the seam the spec's Testing decisions
    chose for each criterion; a different seam or a new harness goes back to the spec's gate. Every spec criterion
    is covered by at least one task, and every design Screens row, Described item, and Left to build item belongs
-   to a task.
+   to a task. A criterion that's a number ("p95 under 200 ms") gets a baseline task first, whose proof is the
+   recorded measurement, and a check that states its threshold and how many runs it takes; if the baseline already
+   meets it, the check guards it and says so.
 4. **Order and checkpoint.** Order by what blocks what. Put a checkpoint every 2–4 tasks where everything passes and
    rolling back is safe. A step that git can't undo (a data migration, a deletion outside the repo) gets its own
-   rollback steps at its checkpoint.
+   rollback steps at its checkpoint. A check the building agent can't run (it needs a permission, a device, or the
+   user's hands) is marked user-run and listed at its checkpoint with the exact command or steps; the user runs it
+   there.
 5. **More than six tasks:** show a one-line-per-task outline first and let the user merge or split, using
    [grill's Asking rules](../grill/SKILL.md#asking), before writing the details.
 6. **A requirement is unresolved or contradictory** in a way that blocks planning: stop and ask. A change to an
@@ -58,7 +65,8 @@ grill asks.
 - **Overview:** the approach in a few lines, and any prefactoring and why.
 - **Tasks:** `T1`, `T2`, … Each has: title; **Covers** (`criterion 2`, active story IDs like `S1`, and exact design
   screen or state names; never invented or Removed IDs); **Delivers** (what
-  you can see working after it); **Checks** (fail now, pass after); **Verify** (the command); **Blocked by**;
+  you can see working after it); **Checks** (fail now, pass after, or which exception from step 3 applies);
+  **Verify** (the command, never including a user-run check); **Blocked by**;
   **Files** likely touched; **Size** (XS–L; split anything bigger).
 - **Commits:** the branch and PR approach (from `AGENTS.md` or preferences), and one commit per task with its
   drafted Conventional Commits message. Checkpoints `CP1`, `CP2`, …: the task each follows, what must pass there,
@@ -69,7 +77,8 @@ grill asks.
 ## Done when
 
 - Every spec criterion maps to at least one task, and every task cites what it covers.
-- Every task has checks that fail before the work, a verify command, and a size of L or smaller.
+- Every task has checks that fail before the work (or, for a prefactor, baseline, guard, or user-run check, the
+  proof step 3 and 4 name), a verify command, and a size of L or smaller.
 - Commits list one message per task, and checkpoints every 2–4 tasks, ending with one where all checks pass.
 - The ledger shows `started`, `draft`, then `approved` with the mtime (or `skipped` with a `gate` note when a recipe
   skips approval), for `plan.md`.

@@ -18,6 +18,7 @@ asking again. The cheapest time to find a wrong assumption is before anything is
   fab:pitch for a fresh verdict. Use it only when its latest approved verdict is sold:
   its For grill section seeds the intent and the decisions (marked "from the pitch"), so those points aren't asked
   again, and its open items become questions.
+- The repo's glossary (`GLOSSARY.md`, or the area's under a `GLOSSARY-MAP.md`) when present.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/grill.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
@@ -26,7 +27,10 @@ asking again. The cheapest time to find a wrong assumption is before anything is
 Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step): `started` row first, save `grill.md` after every exchange.
 
 1. **Gather facts yourself.** Anything the code, docs, or environment can answer is yours to look up, not a question.
-   Use a fresh sub-agent for wide searches if one is available, and keep asking the questions that don't depend on it.
+   First check whether something already does what's asked (a feature, flag, or tool); if so, lead with it. Use a
+   fresh sub-agent for wide searches if one is available, and keep asking the questions that don't depend on it.
+   Facts from outside the repo (docs, API behavior, prior art) go in a research file (see
+   [Runs and handoff artifacts](../../docs/conventions.md#runs-and-handoff-artifacts)).
 2. **Intent.** Check the request against six fields: outcome, who it's for, why now, success, binding constraint, and
    out of scope. Carry forward whatever the request or conversation already states. Ask about the gaps. Settle a
    shaky premise before any decision that depends on it.
@@ -56,6 +60,11 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step):
   recording. If the user is unsure, offer two concrete options instead of an open question.
 - Answers that sound like best practice ("scalable", "clean", "the standard way") aren't decisions yet. Ask what they
   would actually want if they didn't have to justify it.
+- A term that's fuzzy, conflicts with the glossary, or means two things is asked about whenever it comes up: which
+  is meant?
+- A question only someone else can answer: write `questions-<who>.md` in the run (who it's for, what's needed back,
+  each question aimed at the gap), add it to Pending, and go on with what doesn't depend on it. When nothing else can
+  be settled, save and stop; the run resumes when the user brings back the answers.
 - "Wait, what?" or "explain that simpler": rephrase the current question in plain words with a concrete example, and
   keep the same number. It may also mean the premise is wrong, so ask.
 
@@ -70,7 +79,8 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step):
   "from the pitch", "from the conversation", or a fact you looked up (with where).
 - **Handed off:** choices left to a later step, each naming the step that owns it (`spec`, `plan`, `build`).
 - **Open:** anything unresolved. An open item that would change what "done" means blocks approval.
-- **Pending question:** while the interview is running, the question waiting for an answer.
+- **Pending:** while the interview is running, every question waiting for an answer, including questionnaires sent
+  out.
 
 ## Done when
 
