@@ -34,9 +34,9 @@ func validRepo() map[string]string {
 		".claude-plugin/marketplace.json":  `{"name":"fab","plugins":[{"name":"fab","source":"./"}]}`,
 		".agents/plugins/marketplace.json": `{"name":"fab","plugins":[{"name":"fab","source":{"source":"local","path":"./"}}]}`,
 		"skills/plan/SKILL.md": skillMD("plan", "skill", "",
-			"Read `references/format.md` when writing. See [format](references/format.md#top) and [site](https://example.com)."),
+			"Read `references/format.md` when writing. See [format](references/format.md#top), [site](https://example.com), https://example.com/references/x.md and https://example.com/?file=references/x.md."),
 		"skills/plan/references/format.md": "# Format\n",
-		"skills/go/SKILL.md":               skillMD("go", "recipe", "disable-model-invocation: true\n", "1. Run fab:plan."),
+		"skills/go/SKILL.md":               skillMD("go", "recipe", "disable-model-invocation: true\n", "1. Run fab:plan, using [its format](../plan/references/format.md)."),
 		"skills/go/agents/openai.yaml":     "policy:\n  allow_implicit_invocation: false\n",
 	}
 }
@@ -98,6 +98,18 @@ func TestCheckRepo(t *testing.T) {
 		{"broken relative link", map[string]string{
 			"skills/plan/references/format.md": "See [missing](other.md).\n",
 		}, "link", "plan/references/format.md"},
+		{"broken cross-skill references link", map[string]string{
+			"skills/go/SKILL.md": skillMD("go", "recipe", "disable-model-invocation: true\n", "1. Run fab:plan, using [its format](../plan/references/nope.md)."),
+		}, "link", "go/SKILL.md"},
+		{"missing dot-slash references path", map[string]string{
+			"skills/plan/SKILL.md": skillMD("plan", "skill", "", "Read `./references/missing.md` first."),
+		}, "references", "plan/SKILL.md"},
+		{"missing cross-skill references path in text", map[string]string{
+			"skills/go/SKILL.md": skillMD("go", "recipe", "disable-model-invocation: true\n", "1. Run fab:plan with `../plan/references/nope.md`."),
+		}, "references", "go/SKILL.md"},
+		{"missing references path after a colon", map[string]string{
+			"skills/plan/SKILL.md": skillMD("plan", "skill", "", "Read:references/missing.md first."),
+		}, "references", "plan/SKILL.md"},
 		{"missing references file", map[string]string{
 			"skills/plan/references/format.md": del,
 		}, "references", "plan/SKILL.md"},

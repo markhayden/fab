@@ -22,6 +22,8 @@ var (
 	skillRef = regexp.MustCompile(`\bfab:([a-z][a-z0-9-]*)`)
 	// mdLink matches the target of an inline markdown link.
 	mdLink = regexp.MustCompile(`\]\(([^)\s]+)\)`)
+	// urlPattern matches a URL, whose path is never a local file.
+	urlPattern = regexp.MustCompile(`[A-Za-z][A-Za-z0-9+.-]*://[^\s)>\]]+`)
 	// refPath matches a mention of a references/ file.
 	refPath = regexp.MustCompile(`references/[A-Za-z0-9._/-]+\.md`)
 
@@ -114,7 +116,13 @@ func checkReferences(dir string, names map[string]bool) []Finding {
 			}
 		}
 		for _, ref := range uniq(refPathMatches(text), 0) {
-			if !exists(filepath.Join(dir, ref)) {
+			// A skill's own references/ path resolves against its directory;
+			// a longer path (../review/references/x.md) against this file's.
+			base := dir
+			if !strings.HasPrefix(ref, "references/") {
+				base = filepath.Dir(path)
+			}
+			if !exists(filepath.Join(base, ref)) {
 				out = append(out, Finding{Path: path, Rule: "references",
 					Msg: fmt.Sprintf("%s does not exist in %s", ref, filepath.Base(dir))})
 			}
@@ -124,12 +132,26 @@ func checkReferences(dir string, names map[string]bool) []Finding {
 	return out
 }
 
+// refPathMatches returns every path that names a references/ file: a skill's
+// own ("references/x.md", "./references/x.md" trimmed to that) or one inside a
+// longer path ("../review/references/x.md", kept whole). URLs are skipped.
 func refPathMatches(text string) [][]string {
 	var out [][]string
-	for _, m := range refPath.FindAllString(text, -1) {
-		out = append(out, []string{m})
+	text = urlPattern.ReplaceAllString(text, "")
+	for _, loc := range refPath.FindAllStringIndex(text, -1) {
+		start := loc[0]
+		for start > 0 && isPathChar(text[start-1]) {
+			start--
+		}
+		ref := strings.TrimPrefix(text[start:loc[1]], "./")
+		out = append(out, []string{ref})
 	}
 	return out
+}
+
+func isPathChar(c byte) bool {
+	return c == '.' || c == '/' || c == '_' || c == '-' ||
+		'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || '0' <= c && c <= '9'
 }
 
 // checkForbidden fails on host-specific or legacy strings anywhere under skills/.
