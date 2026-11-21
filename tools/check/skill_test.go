@@ -15,8 +15,20 @@ type fixture struct {
 	description string
 	sections    []string // "## " headings; defaults by kind
 	noOverride  bool
+	overrideIn  string  // section holding the override line; default Inputs (skill) or Rules (recipe)
 	rawFront    *string // replaces the whole frontmatter block when set
 	extraLines  int     // filler lines appended to the body
+}
+
+// overrideSection is where the fixture puts the override line.
+func (f fixture) overrideSection() string {
+	if f.overrideIn != "" {
+		return f.overrideIn
+	}
+	if f.kind == "recipe" {
+		return "Rules"
+	}
+	return "Inputs"
 }
 
 func (f fixture) write(t *testing.T) string {
@@ -47,9 +59,9 @@ func (f fixture) write(t *testing.T) string {
 		b.WriteString("---\nname: " + f.name + "\nkind: " + f.kind + "\ndescription: " + f.description + "\n---\n")
 	}
 	b.WriteString("\n# Demo\n\nWhat it produces.\n")
-	for i, s := range f.sections {
+	for _, s := range f.sections {
 		b.WriteString("\n## " + s + "\n\n")
-		if i == 0 && !f.noOverride {
+		if s == f.overrideSection() && !f.noOverride {
 			b.WriteString(overrideLine(f.name) + "\n")
 		} else {
 			b.WriteString("- item\n")
@@ -95,6 +107,9 @@ func TestCheckSkill(t *testing.T) {
 		{name: "skill missing Done when", fx: fixture{sections: []string{"Inputs", "Process", "Output"}}, wantRule: "sections"},
 		{name: "recipe missing Rules", fx: fixture{kind: "recipe", sections: []string{"Steps"}}, wantRule: "sections"},
 		{name: "missing override line", fx: fixture{noOverride: true}, wantRule: "override"},
+		{name: "override line outside Inputs", fx: fixture{overrideIn: "Process"}, wantRule: "override"},
+		{name: "recipe override outside Rules", fx: fixture{kind: "recipe", overrideIn: "Steps"}, wantRule: "override"},
+		{name: "recipe override under Rules", fx: fixture{kind: "recipe"}},
 		{name: "151 lines warns only", fx: fixture{extraLines: 140}, wantWarn: "length"},
 	}
 

@@ -132,8 +132,12 @@ func checkSkill(dir string) []Finding {
 		}
 	}
 
-	if !strings.Contains(s.body, overrideLine(fm.Name)) {
+	want := overrideSection[fm.Kind]
+	switch got, found := sectionOf(s.body, overrideLine(fm.Name)); {
+	case !found:
 		add("override", "missing the standard personal-override line for %q", fm.Name)
+	case want != "" && got != want:
+		add("override", "the personal-override line belongs under ## %s, not ## %s", want, got)
 	}
 
 	if s.lines > warnLines {
@@ -144,6 +148,29 @@ func checkSkill(dir string) []Finding {
 }
 
 // headings returns the "## " section titles outside fenced code blocks.
+// overrideSection is where the override line goes for each kind
+// (docs/conventions.md: The override line).
+var overrideSection = map[string]string{"skill": "Inputs", "recipe": "Rules"}
+
+// sectionOf returns the ## heading a line sits under, outside code fences,
+// and whether the line was found.
+func sectionOf(body, line string) (string, bool) {
+	section, inFence := "", false
+	sc := bufio.NewScanner(bytes.NewBufferString(body))
+	for sc.Scan() {
+		text := sc.Text()
+		switch {
+		case strings.HasPrefix(text, "```"):
+			inFence = !inFence
+		case !inFence && strings.HasPrefix(text, "## "):
+			section = strings.TrimSpace(strings.TrimPrefix(text, "## "))
+		case !inFence && text == line:
+			return section, true
+		}
+	}
+	return "", false
+}
+
 func headings(body string) map[string]bool {
 	out := map[string]bool{}
 	inFence := false
