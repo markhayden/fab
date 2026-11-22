@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/assets/fab.png" alt="fab: a red toolbox holding a blueprint, a code window, a gear and a wrench" width="384"></p>
+
 # fab
 
 Dev skills and recipes for Claude Code and Codex, from one `skills/` directory.
