@@ -109,3 +109,27 @@ On top of conventions' "Writing the body":
   wanted one, and keep "never" for real hard lines.
 
 Adapted from Matt Pocock's `writing-for-agents` skill ([mattpocock/skills](https://github.com/mattpocock/skills), MIT).
+
+## Cross-host verification (1.0.0)
+
+2026-11-21, installed plugin from GitHub, Claude Code 2.1.330 and Codex CLI 0.170.0, headless (`claude -p`,
+`codex exec`), a fresh session per run, in throwaway clones of a small Go CLI.
+
+| Check | Claude Code | Codex |
+|---|---|---|
+| `bigdev` called by name prints `[bigdev]` | pass | pass |
+| `tinydev` called by name prints `[tinydev]` | pass | pass |
+| A plain request matching bigdev's description (×2) doesn't start it | pass | pass |
+| A plain request matching tinydev's description (×2) doesn't start it | pass | pass |
+| Resume: spec approved → next is reuse/design (skipped, no UI), then plan; spec untouched | pass | pass |
+| Resume: spec left as a draft → its gate is re-presented, nothing regenerated | pass | pass |
+| Resume: spec edited after approval → re-confirmation, with a review round on the change | pass | pass |
+| Resume: spec edited 5 ms after approval → caught by the sub-second mtime | pass | pass |
+| An override that skips a gate bigdev keeps → reported and asked, not applied | pass | pass |
+| tinydev end to end | feature route | bug route |
+
+The first plain-request round failed in both hosts: the model followed grill's links to conventions, found the recipe
+files in the plugin cache, and ran one. The host settings held; the model went around them. Since 0.18.1 a recipe runs
+only when the user names it, and each recipe's body opens by saying so; the rerun passed, including a Codex run that
+read both recipe files and stopped. Plain requests must not name fab: "run the full fab flow" names it, and the model
+rightly follows.
