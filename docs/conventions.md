@@ -35,6 +35,11 @@ A recipe is call-only in **both** hosts, with these exact values: **(checked)**
     allow_implicit_invocation: false
   ```
 
+Those settings keep a host from starting a recipe on its own, but a model can still find a recipe's file while
+following another skill. So a recipe runs only when the user names it (`/fab:<name>`, `$fab:<name>`, or "run
+<name>"); a request that merely matches one is handled by the skills it asks for, and a recipe's body opens by saying
+so.
+
 ## Skill shape
 
 ```markdown

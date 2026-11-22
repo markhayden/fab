@@ -1,6 +1,6 @@
 {
   "name": "fab",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Mark Hayden's dev skills and recipes: spec, plan, build, test, and the workflows that chain them.",
   "author": { "name": "WaffleHammock" },
   "homepage": "https://github.com/markhayden/fab",

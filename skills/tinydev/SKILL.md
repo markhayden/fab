@@ -7,6 +7,8 @@ disable-model-invocation: true
 
 # Tinydev
 
+Run this only when the user named tinydev; otherwise stop reading and handle the request with the skills it asks for.
+
 The light flow for a change whose scope is obvious: you approve what "done" means, then the finished work. Its own
 record is `tinydev.md`. Begin your first reply with `[tinydev]` and the run's path.
 

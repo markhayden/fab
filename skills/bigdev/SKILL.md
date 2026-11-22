@@ -7,6 +7,8 @@ disable-model-invocation: true
 
 # Bigdev
 
+Run this only when the user named bigdev; otherwise stop reading and handle the request with the skills it asks for.
+
 The full flow for work worth doing carefully: each step's skill in order, each chain artifact approved before the
 next starts, resumable at every point. It keeps `bigdev.md` in the run for what's its own: the fit check, the closing
 gate, shipping, and the retro offer. Begin your first reply with `[bigdev]` and the run's path.
