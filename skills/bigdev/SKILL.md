@@ -22,7 +22,7 @@ its pitch was sold. Run each skill as written; the table says only what bigdev a
 | # | Step | Skill | Gate | bigdev adds |
 |---|---|---|---|---|
 | 1 | Pitch | fab:pitch | kept | Only when asked, or the run already has a pitch; a killed or parked verdict ends the run with bigdev's `skipped` row (`step: pitch <verdict>`). |
-| 2 | Interview | fab:grill | kept | |
+| 2 | Interview | fab:grill | kept | When `grill.md`'s Sweep says `skipped: tinydev`: append a grill `started` row unless grill's latest row already is one, run the challenge and sweep from where grill's Pending stands, settle what they reopen, then grill's gate again. |
 | 3 | Fit check | bigdev | a question | Rules; settled once `bigdev.md` records the answer. |
 | 4 | Stories | fab:stories | kept | |
 | 5 | Spec | fab:spec | kept | Before its gate, spec calls fab:review on `spec.md`. |

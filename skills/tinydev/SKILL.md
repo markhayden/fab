@@ -23,10 +23,10 @@ feature`).
 | # | Step | Skill | Gate | tinydev adds |
 |---|---|---|---|---|
 | 1 | Fix | fab:debug | final at 16 | Bug reports only. First switch to a new branch, as build would, recording it and the starting SHA in `tinydev.md`; resuming reuses them. |
-| 2 | Interview | fab:grill | skipped | Asks only what would change what "done" means; when nothing would, it writes `grill.md` and goes on. |
+| 2 | Interview | fab:grill | skipped | Skips the challenge and the sweep (Sweep says "skipped: tinydev"). Asks only what would change what "done" means, inferred decisions included; when nothing would, it writes `grill.md` and goes on. |
 | 3 | Size check | tinydev | a question | Rules. |
 | 4 | Stories | fab:stories | — | Skipped, `step: tinydev`. |
-| 5 | Spec | fab:spec | kept | Works from `grill.md`. More gaps than spec may ask about: make the bigdev offer then; declined, record "stays tiny (at spec)", rerun grill on them (its gate skipped) until its Open list is empty, then finish spec. |
+| 5 | Spec | fab:spec | kept | Works from `grill.md`. More gaps than spec may ask about: make the bigdev offer then; declined, record "stays tiny (at spec)", rerun grill on them as in row 2 until its Open list is empty, then finish spec. |
 | 6 | Reuse | fab:ui-kit (reuse) | — | Skipped, `step: tinydev`. |
 | 7 | Design | fab:design | — | Skipped, `step: tinydev`. |
 | 8 | Plan | fab:plan | skipped | Usually one task and a final checkpoint. |
