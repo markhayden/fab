@@ -287,8 +287,8 @@ For every recipe (`bigdev`, `tinydev`), on top of each step's own skill:
   rerun if its inputs changed; and the handoff offer isn't made back to the recipe the run came from.
 - **Gates show a brief,** offered as the step's own choice (approve or name a change; picks and verdicts as their skills
   say): 3 to 6 lines on what was decided or done, what changed since the last gate, what the agent is least sure of, and
-  any open review disputes, then the artifact's path; a picks gate also lists its numbered candidates. The full artifact
-  only when asked.
+  any open review disputes, then the artifact's path; a picks gate also lists its numbered candidates. stories' gate
+  shows its one line per story instead. The full artifact only when asked.
 - **Child overrides** follow [Personal layer](#personal-layer), passing each one's path, for every skill the recipe runs
   and the ones they call (review, debug, ui-kit setup), in a fresh session or sub-agent too.
 - **Reviewed artifacts stay reviewed:** an artifact changed after its review, at its gate or later, gets a review round

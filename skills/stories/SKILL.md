@@ -7,7 +7,8 @@ description: Write the user stories for settled work into stories.md, one per be
 # Stories
 
 Lists what each person will be able to do or notice once the work ships, so you can check that the spec builds the
-right thing before it's written. It synthesizes from what's settled; it doesn't interview again.
+right thing before it's written. It synthesizes from what's settled, then checks a sample with you, since seeing the
+idea as behavior is where gaps show.
 
 ## Inputs
 
@@ -37,8 +38,23 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step).
 4. **Give each story one concrete example:** real-looking input and what the person sees, specific enough that a
    reader can tell whether a spec covers it.
 
-**GATE:** present `stories.md`, wait for approval. Offer it as a choice (approve, or name what to change), the way
-grill asks.
+5. **Check a sample with the user.** Take one story from each group (each kind of person, plus one failure story and one
+   misuse story when there are any), the one you're least sure of. Ask about each, one at a time, as [grill
+   asks](../grill/SKILL.md#asking): the story and its example, then confirm, change it, or drop it, with no
+   recommendation, since the point is the user's view. Save each question under Checked as `asking`, as asked, before
+   you ask, and its answer as it comes. Preferences never answer a sample. A change is settled once the user says what
+   changes; it is applied to the similar stories in its group, and you say which ones. A dropped story moves to Not
+   covered (dropped by the user), and the next least-sure story in its group, if any, becomes the sample. Then ask "any
+   behavior missing?" as an open question; each answer becomes a story (a new group gets its sample), or a Not covered
+   entry when it isn't settled.
+6. **Changes to grill.** An answer here or at the gate that alters `grill.md`'s intent or a decision pauses sampling.
+   Note it under Checked as `grill change owed`, update `grill.md` (source: the user, during stories), including the
+   Sweep areas it touches, append a `draft` row for it and a stories `started` row, and present grill's gate on that
+   change. Once it's approved, mark the note done and rerun steps 3–5 for what it touches (a new group gets its sample),
+   setting the Checked entries it touches back to `asking` with their questions as they now read.
+
+**GATE:** present the stories, one line each (ID, who, what), with Checked's answers and the path, wait for approval.
+Offer it as a choice (approve, or name what to change), the way grill asks. In a recipe, this list is the brief.
 
 ## Output
 
@@ -47,6 +63,8 @@ grill asks.
 - **Stories:** numbered `S1`, `S2`, …, grouped by who it's for. Each is only
   "As a <who>, I want <what>, so that <why>", then one line starting `e.g.` with the example. No Given/When/Then
   or acceptance criteria; fab:spec owns those.
+- **Checked:** each sample's group, story ID, and answer (`asking` until there is one): confirmed, changed and which
+  stories followed, or dropped; then the "any behavior missing?" answer and what it added.
 - **Removed:** once approved, IDs never change or get reused, because spec cites them. A dropped story moves here
   with its ID and is no longer a requirement.
 - **Not covered:** behaviors someone might expect that this work won't deliver, each with its reason (out of scope,
@@ -57,5 +75,6 @@ grill asks.
 - Every story has who, what, why, and one example, and every in-scope observable behavior that's settled has a
   story.
 - Failure behavior that grill settled has its own story.
+- Checked has an answer for one story per group that still has stories, and for the "any behavior missing?" question.
 - The ledger shows `started`, `draft`, then `approved` with the mtime (or `skipped` with a `gate` note when a recipe
   skips approval), for `stories.md`; or a `skipped` row with `step: no observable behavior change`.
