@@ -29,6 +29,30 @@ One row per audited skill or recipe: source, decision, and live-test evidence.
 | `tinydev` (recipe) | Mark's "tinydev asks zero questions when things are clear"; the plan's T15 skip-note rule | Light flow: grill asks only what would change what "done" means, two size checks (after grill and after plan) offer a hand-off to bigdev, a spec you approve, plan and intermediate checkpoints with gates skipped, build with its cross-host review, simplify, test, then the same upkeep as bigdev, all approved at one end gate (Mark). Bug reports take a debug route on their own branch (Mark). Stories, reuse and design are skipped; needing stories (several kinds of users, or a trust boundary), UI to design, more than a couple of decisions, or more than about three plan tasks triggers the bigdev offer (Mark). Same release: rules both recipes share (record, resume, handoff, briefs, overrides, follow-up review and retest, publishing, CI) moved into conventions' "Running a recipe" and bigdev was trimmed to link it; simplify's commits now get a follow-up review round. Reviewed with fab:review's loop: 5 rounds of Codex spec + standards reviewers. Name kept. | 2026-11-21, end to end in both hosts, fresh session per stop. Claude, feature (`-version` for greet): no grill questions, both size checks "stays tiny", one spec question (first test harness), spec gate, one-task plan, build with 2 Codex review rounds (3 fixes), simplify picks (none), test pass, docs fixed the stale README and added a changelog entry with every command run, end gate settled all records, retro skipped, publish declined, run closed. Codex, bug (slug regression): own branch, debug bisected to `e33ba47` and fixed with a regression test, simplify's cleanup triggered the follow-up review (outside-sandbox Claude declined, 2 sub-agent rounds), end gate, retro skipped, publish declined. It held a ship stop because "when debug ran" matched the bug route's own debug; wording fixed to "when a CI failure called debug". |
 | `likeimfive` | Matt Pocock's `wait-what` idea (MIT); CP3 feedback (Mark: no way to trigger an explanation mid-interview; "tell me the benefits and drawbacks" asked often) | One skill, two depths (Mark): simpler (plain words, an example from the user's work, eight lines at most) and deeper (each option's benefits, drawbacks, pick-it-when; the recommendation's drawbacks never empty). Writes nothing; asks the waiting question again under the same number. Triggered by grill's Asking rules, which every asking skill shares: a last **Explain these options** picker option (so two or three real options) and typed "simpler" / "deeper", announced once per interview (Mark). Name `likeimfive` (Mark). Reviewed with grill and stories over 5 rounds of Codex spec + standards reviewers. | 2026-11-22, Claude 2.1.329 (`--plugin-dir` + `--add-dir`) and Codex 0.170.0 (checkout path), a tasks-CLI scratch repo: grill's first question announced simpler/deeper and ended with **Explain these options**; a fresh session given "deeper" read Q1 from Pending, gave each option's benefits, drawbacks and pick-it-when plus what would change the recommendation, and asked Q1 again unchanged. Challenge in both hosts named the weakest point (reminders only while the laptop is awake) and another framing (hand alerts to Calendar or Reminders). Resumed grill went to the sweep's uncovered areas. stories sampled one story per group with confirm/change/drop and no recommendation, saved as `asking` under Checked; with a copied fixture Codex correctly re-presented grill first (mtime changed). Fold: Codex's final reply once only pointed at the saved question, so Asking now says the full question ends the reply; rerun showed it. |
 
+## Antigravity (1.2.0)
+
+Mark, 2026-11-25: "we should integrate antigravity if its available ... the two opposite the main planning to actually
+do the review rounds." Grill picks: each other host runs both reviewers (four per round with two); Antigravity is a
+full third host now; `/plan` and `/voice` (Antigravity built-ins) are asked for by name, no renames; native
+`.antigravity-plugin/plugin.json`; each reviewer on its most capable model at high effort (Codex `gpt-6.2-astra`,
+Antigravity Gemini 4 Carbon, Claude `opus`).
+
+- Found on the way: with `--ignore-user-config`, the Codex reviewer had been running on its default model at low
+  effort. It now passes `-m` and the effort.
+- Antigravity facts, tested with CLI 1.5.17: it installs fab's skills and honors `disable-model-invocation`
+  (a plain "full flow" request ran the chain skills, never bigdev); skills are `/<name>`; headless `agy` edits files
+  unless `--mode plan` (unknown modes are ignored); plan mode blocked `--output=` and `>` writes; a denied tool ends a
+  headless run with no output and exit 0; `--disable-slash-commands` turns plan mode off.
+- Reviewed by Codex (`gpt-6.2-astra`) and Antigravity (Carbon), both axes each, 5 rounds: 46 findings, fixed or
+  rebutted, every rebuttal accepted by round 5 (one contested and then fixed: Antigravity's own tool names are now
+  forbidden).
+- Live tests on a planted-bug fixture (off-by-one total, missing empty case): from Claude Code, the review loop
+  itself (Codex + Antigravity); from Codex, Claude (`opus`) + Antigravity, all four caught both bugs, Antigravity's
+  first attempts died on a denied command and passed on retry (fold: its briefs now say to read with file tools and
+  run no shell commands), and its lookup chose Neon as "newer" (fold: only the lookup's own test counts); from
+  Antigravity (after reinstalling 1.2.0), Codex (`gpt-6.2-astra`) + Claude (`opus`), all four first-try, run
+  outside its sandbox, record written. grill in Antigravity: run, ledger, Explain option, simpler/deeper announced.
+
 ## CP3 feedback (1.1.0)
 
 From Mark's first bigdev run on real work (2026-11-22):

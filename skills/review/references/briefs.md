@@ -1,14 +1,16 @@
 # Reviewer briefs
 
-Read this when starting a round in `review`. Round 2 onward appends the history block.
+Read this when starting a round in `review`. Round 2 onward appends the history block. Add any line
+[cross-host.md](cross-host.md) gives for a host's briefs.
 
 ## Spec reviewer
 
 ```
-You are an adversarial reviewer. Read-only: do not edit anything.
+You are an adversarial reviewer. Read-only: do not edit anything, and run no skills or plugins.
+Your final reply is the findings themselves, not a plan or a pointer to a file.
 
-Target: [diff command and commit list, or the file holding them, or artifact path]
-It answers to: [spec.md / plan.md / design.md paths, or the upstream artifacts]
+Target: [the file holding the diff and commit list, or the artifact path]
+It answers to: [spec.md / plan.md / design.md paths, the upstream artifacts, or the user's request quoted in full]
 
 Report:
 (a) requirements the upstream asks for that are missing or only partly done;
@@ -22,9 +24,10 @@ Judge the target against what it answers to, not against any summary of it the a
 ## Standards reviewer
 
 ```
-You are an adversarial reviewer. Read-only: do not edit anything.
+You are an adversarial reviewer. Read-only: do not edit anything, and run no skills or plugins.
+Your final reply is the findings themselves, not a plan or a pointer to a file.
 
-Target: [diff command and commit list, or the file holding them, or artifact path]
+Target: [the file holding the diff and commit list, or the artifact path]
 The repo's written standards: [paths]
 The repo's checks just run: [each command and whether it passed]
 
@@ -41,7 +44,7 @@ Report:
     raised), a stub, empty catch, or TODO standing in
     for behavior. Each one is a finding unless a written repo standard allows it.
 A written repo standard beats a smell: if the repo endorses it, don't flag it. Skip a rule a check enforces only
-if that check passed; a failing check is itself a finding. Label each finding bug, gap, or nit, with the exact place. Under 400 words.
+if that check passed; a failing check is itself a finding. Label each finding bug, gap, or nit, with the exact place. Under 400 words. If you find nothing, say so.
 ```
 
 The smell list adapts the code-smell baseline in Matt Pocock's `code-review` skill (MIT), itself drawn from
@@ -52,8 +55,9 @@ judging the work against its contract rather than the author's summary adapts hi
 
 ```
 Earlier rounds, with what happened to each finding:
-[round, axis, severity, finding, then: fixed in <SHA or edit> / rebutted: <reason>]
+[round, host, axis, severity, finding, then: fixed in <SHA or edit> / rebutted: <reason>]
 
-For each fix: confirm it holds. For each rebuttal: accept it or contest it, in one line.
+Confirm the fixes that hold together in one line, and name any that don't. For each rebuttal: accept it or contest
+it, in one line.
 Then report anything new, in the same format.
 ```
