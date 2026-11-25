@@ -16,6 +16,7 @@ Why fab looks the way it does. Every skill and recipe is judged against these te
    trigger it. Nothing else.
 7. **Fewer, broader skills.** Overlapping skills get merged by default. A smaller catalog is easier to remember and
    easier for the model to choose from.
-8. **Neutral between hosts.** No host-specific tool names in skill bodies. One `SKILL.md` serves Claude Code and Codex.
+8. **Neutral between hosts.** No host-specific tool names in skill bodies. One `SKILL.md` serves Claude Code, Codex, and
+   Antigravity.
 9. **"Done when" means evidence.** Output, a path, a commit SHA. Never "I checked it".
-10. **Tested live.** Every skill is run on a real task in both hosts before it ships. Automated skill tests come later.
+10. **Tested live.** Every skill is run on a real task in every host before it ships. Automated skill tests come later.

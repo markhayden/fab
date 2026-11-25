@@ -17,7 +17,7 @@ command that fails on this bug; without it, every theory is a guess.
   run](../../docs/conventions.md#starting-or-joining-a-run). Called (directly or not) by a review with no run, the
   record goes in chat and the guided script's files go in the system temp dir.
 - Known-good points for regressions: `build.md`'s starting SHA, an earlier `tests.md` SHA, a release tag.
-- `spec.md` and `design.md` when present (what correct behavior is), the repo's `AGENTS.md`/`CLAUDE.md` (test
+- `spec.md` and `design.md` when present (what correct behavior is), the repo's `AGENTS.md`/`CLAUDE.md`/`GEMINI.md` (test
   commands, commit rules, hooks), and any glossary or decision records covering the code involved.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/debug.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).

@@ -16,7 +16,8 @@ commit for each, so build can work one task at a time and stop at safe rollback 
   (`ui-kit-reuse.md`, or its latest numbered pass, finished first if still in draft) once approved or gate-skipped:
   tasks name the components and tokens they use and the shared components they create. An artifact whose approval gate
   was skipped still counts; one whose step was skipped (`step:` note) doesn't.
-- The repo: `AGENTS.md`/`CLAUDE.md` (commands, branch and commit rules), the code the change touches, existing tests.
+- The repo: `AGENTS.md`/`CLAUDE.md`/`GEMINI.md` (commands, branch and commit rules), the code the change touches,
+  existing tests.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/plan.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
@@ -68,9 +69,9 @@ grill asks.
   you can see working after it); **Checks** (fail now, pass after, or which exception from step 3 applies);
   **Verify** (the command, never including a user-run check); **Blocked by**;
   **Files** likely touched; **Size** (XS–L; split anything bigger).
-- **Commits:** the branch and PR approach (from `AGENTS.md` or preferences), and one commit per task with its
-  drafted Conventional Commits message. Checkpoints `CP1`, `CP2`, …: the task each follows, what must pass there,
-  and any rollback steps git can't do. The last task is always followed by one. Build records each checkpoint's
+- **Commits:** the branch and PR approach (from the repo's agent instructions file or preferences), and one commit per
+  task with its drafted Conventional Commits message. Checkpoints `CP1`, `CP2`, …: the task each follows, what must pass
+  there, and any rollback steps git can't do. The last task is always followed by one. Build records each checkpoint's
   SHA in `build.md`.
 - **Open questions:** anything unresolved. One that changes a task's checks blocks approval.
 

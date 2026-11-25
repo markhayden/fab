@@ -20,7 +20,7 @@ fab:review flags these problems; this skill fixes them.
   run](../../docs/conventions.md#starting-or-joining-a-run).
 - fab:review records for the target (`review-*.md`): Standards findings that were rebutted as out of scope are
   candidates.
-- The repo's standards (`AGENTS.md`/`CLAUDE.md`, standards and style docs), its checks, and any glossary or decision
+- The repo's standards (`AGENTS.md`/`CLAUDE.md`/`GEMINI.md`, standards and style docs), its checks, and any glossary or decision
   records covering the code. A pattern the standards endorse isn't a candidate; one a decision record settled is
   raised only if the friction is real, and marked as reopening it. Use the glossary's terms in the record.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked (picks excepted).

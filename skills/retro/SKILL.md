@@ -18,8 +18,8 @@ same trouble doesn't happen again, and records it in `retro.md`.
   weak tests, anything not verified); and questions in `grill.md`/`spec.md` the user had already settled before.
 - The current conversation, when retro runs in the session it looks back on. With no run, it's the only
   evidence: skip the file and the ledger, and hold both gates below in chat.
-- The repo's environment, read before proposing anything: its agent instructions file (`AGENTS.md` or
-  `CLAUDE.md`), standards and style docs, hooks, CI config, linters, and the check commands they run.
+- The repo's environment, read before proposing anything: its agent instructions file (`AGENTS.md`,
+  `CLAUDE.md`, or `GEMINI.md`), standards and style docs, hooks, CI config, linters, and the check commands they run.
 - Preferences: `~/.config/fab/preferences.md` (read; changing it is always asked).
 - Personal override: if `~/.config/fab/skills/retro.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 

@@ -22,7 +22,7 @@ fab:docs's job.
 - The run for any other target: the caller's run when another step or a recipe calls this (see [Writing during a
   step](../../docs/conventions.md#writing-during-a-step)); called (directly or not) by a review with no run, skip the
   file and the ledger and hold both gates in chat. Otherwise start or join one.
-- The repo's internal docs: its agent instructions file (`AGENTS.md` or `CLAUDE.md`), knowledge or notes folders,
+- The repo's internal docs: its agent instructions file (`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`), knowledge or notes folders,
   ADRs, the glossary, and committed specs, plans, and architecture notes.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked (picks excepted).
 - Personal override: if `~/.config/fab/skills/knowledge.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).

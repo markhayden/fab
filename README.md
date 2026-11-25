@@ -2,11 +2,12 @@
 
 # fab
 
-Dev skills and recipes for Claude Code and Codex, from one `skills/` directory.
+Dev skills and recipes for Claude Code, Codex, and Antigravity, from one `skills/` directory.
 
 **Skills** are building blocks: one job each. **Recipes** chain skills into a workflow with approval gates, and only run
-when you call them. Every name is identical in both hosts, only the sigil differs: `/fab:<name>` in Claude Code,
-`$fab:<name>` in Codex.
+when you call them. Every name is the same in each host; only how you call it differs: `/fab:<name>` in Claude Code,
+`$fab:<name>` in Codex, `/<name>` in Antigravity. Antigravity's own `/plan` and `/voice` take those two names, so there
+you ask for them in words: "run fab's plan skill".
 
 ## Install
 
@@ -24,6 +25,12 @@ codex plugin marketplace add markhayden/fab
 codex plugin add fab@fab
 ```
 
+Antigravity:
+
+```sh
+agy plugin install https://github.com/markhayden/fab
+```
+
 ## Update
 
 Claude Code (then restart the session):
@@ -39,6 +46,12 @@ Codex:
 codex plugin marketplace upgrade fab
 ```
 
+Antigravity (the same command as installing):
+
+```sh
+agy plugin install https://github.com/markhayden/fab
+```
+
 ## Skills
 
 | Skill | What it does |
@@ -50,7 +63,7 @@ codex plugin marketplace upgrade fab
 | `likeimfive` | Explains anything in plain words with an example, or goes deeper on a choice with each option's benefits and drawbacks. Offered with every multiple-choice question grill asks, and by the skills that ask the same way. |
 | `plan` | Breaks the approved spec (and design) into `plan.md`: vertical-slice tasks with checks that fail before and pass after, one commit each, and rollback checkpoints. |
 | `retro` | Looks back over a finished run and proposes environment fixes (checks for mechanical mistakes, standards for judgment calls, pointers, preferences), then applies the ones you pick and writes `retro.md`. |
-| `review` | Adversarial review by the other host's agent (Codex from Claude Code, Claude Code from Codex): a spec reviewer and a standards reviewer each round, every finding fixed or rebutted, at least 2 rounds and at most 5. `build` runs it before its last checkpoint. |
+| `review` | Adversarial review by every other installed host's agent on its top model (from Claude Code: Codex and Antigravity), each running a spec reviewer and a standards reviewer every round; every finding fixed or rebutted, at least 2 rounds and at most 5. `build` runs it before its last checkpoint. |
 | `simplify` | Cleans up a diff or an area without changing behavior (duplication, dead weight, needless layers), one commit per change (tests untouched for safe ones), and deepens shallow modules you pick. Writes `simplify-<target>.md`. |
 | `spec` | Turns the settled decisions and user stories into `spec.md`: testable success criteria, scope, implementation and testing decisions, boundaries. |
 | `stories` | Writes the user stories for settled work into `stories.md`: one per behavior, each with a concrete example, then checks one per group with you, asks what's missing, and shows you the full list. Skips (with your OK) when nothing observable changes. |
@@ -63,7 +76,8 @@ codex plugin marketplace upgrade fab
 
 ## Recipes
 
-Recipes are call-only: they run only when you name them (`/fab:bigdev` in Claude Code, `$fab:bigdev` in Codex).
+Recipes are call-only: they run only when you name them (`/fab:bigdev` in Claude Code, `$fab:bigdev` in Codex, `/bigdev`
+in Antigravity).
 
 | Recipe | What it does |
 |---|---|
@@ -85,9 +99,10 @@ but if it conflicts with an approval gate, the agent asks instead of skipping th
 ("always include a rollback section"), not step numbers, so they keep working as fab changes. Keeping these files in
 sync across machines is up to you (a private dotfiles repo works).
 
-`~/.config/fab/` is outside your project, so Claude Code asks before reading it. To skip the prompt, allow it once in
-`~/.claude/settings.json`: `"permissions": { "allow": ["Read(~/.config/fab/**)"] }`. In headless runs (`claude -p`),
-pass `--add-dir ~/.config/fab`; without access the skill warns and falls back to defaults.
+`~/.config/fab/` is outside your project, so Claude Code and Antigravity ask before reading it. To skip the prompt, allow it once in
+`~/.claude/settings.json`: `"permissions": { "allow": ["Read(~/.config/fab/**)"] }`. In headless runs (`claude -p`,
+`agy -p`), pass `--add-dir ~/.config/fab`; without it, Claude's skills warn and fall back to defaults, while `agy -p`
+ends the run with no output.
 
 ## Docs
 

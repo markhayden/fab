@@ -13,7 +13,7 @@ from one source instead of the chat. It synthesizes what's settled; it doesn't i
 
 - The run (`.fab/<YYYY-MM-DD>-<slug>/`): start or join one first, as in [Starting or joining a run](../../docs/conventions.md#starting-or-joining-a-run).
 - `grill.md` (intent and decisions) and `stories.md` (user stories) from the run, plus anything settled in the conversation.
-- The repo: its `AGENTS.md`/`CLAUDE.md`, docs, tests, and the code the change touches.
+- The repo: its `AGENTS.md`/`CLAUDE.md`/`GEMINI.md`, docs, tests, and the code the change touches.
 - The repo's glossary when present (its terms are the spec's terms).
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/spec.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).

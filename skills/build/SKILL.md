@@ -16,7 +16,7 @@ you can roll back to and trust.
   step (`step:` note) doesn't. If an approved artifact's mtime no longer matches its approval row, re-present it
   first.
 - `build.md`, if build already started: it says which tasks are done.
-- The repo's `AGENTS.md`/`CLAUDE.md`: commands, commit rules, hooks. They always apply.
+- The repo's `AGENTS.md`/`CLAUDE.md`/`GEMINI.md`: commands, commit rules, hooks. They always apply.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/build.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 
@@ -70,9 +70,9 @@ Follow [Writing during a step](../../docs/conventions.md#writing-during-a-step);
 **GATE:** at each checkpoint, the progress report and `build.md`, wait for approval before the next task.
 
 7. **At the end,** offer to push the branch and open the PR, with a drafted title and body
-   ([references/pr.md](references/pr.md)) and no AI attribution.
-   A standing rule in `AGENTS.md` or preferences settles this without asking. Record the outcome (and the PR link)
-   as a ledger note, not in the approved `build.md`.
+   ([references/pr.md](references/pr.md)) and no AI attribution. A standing rule in the repo's agent instructions file
+   or preferences settles this without asking. Record the outcome (and the PR link) as a ledger note, not in the
+   approved `build.md`.
 
 ## Output
 

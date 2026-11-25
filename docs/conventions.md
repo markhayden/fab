@@ -7,8 +7,11 @@ If a rule here and the checker disagree, the checker is wrong: fix it to match t
 
 - A skill's name is its directory name: `skills/<name>/SKILL.md` with `name: <name>`. **(checked)**
 - Names are lowercase letters, digits, and hyphens; they start with a letter; ≤32 chars. **(checked)**
-- The `fab:` plugin namespace is added by the host, so names carry no prefix.
-- Invocation is identical across hosts except the sigil: Claude `/fab:<name>`, Codex `$fab:<name>`.
+- Names carry no prefix: Claude and Codex add the `fab:` namespace, Antigravity adds none.
+- Invocation by host: Claude `/fab:<name>`, Codex `$fab:<name>`, Antigravity `/<name>`.
+  Antigravity's own `/plan` and `/voice` win over fab's, so there you ask for those two by name ("run fab's plan
+  skill"); recipes read a skill's file directly, so they're unaffected. A new skill name that matches an Antigravity
+  built-in command needs the same note in the README.
 - **Skills** are named for the action they perform or what they produce: `grill`, `stories`, `spec`, `design`, `plan`,
   `build`, `test`, `voice`.
 - **Recipes** that run the build flow are named `<size>dev`: `bigdev` (full ceremony), `tinydev` (light).
@@ -26,9 +29,9 @@ Every `SKILL.md` declares its kind in frontmatter. **(checked)**
 | `skill` | Building block: one job, owns its process | Explicit or automatic |
 | `recipe` | Orchestrator: sequences skills with gates; almost no process of its own | **Explicit only** |
 
-A recipe is call-only in **both** hosts, with these exact values: **(checked)**
+A recipe is call-only in **every** host, with these exact values: **(checked)**
 
-- Claude, in `SKILL.md` frontmatter: `disable-model-invocation: true`
+- Claude and Antigravity, in `SKILL.md` frontmatter: `disable-model-invocation: true`
 - Codex, in `skills/<name>/agents/openai.yaml`:
   ```yaml
   policy:
@@ -36,8 +39,8 @@ A recipe is call-only in **both** hosts, with these exact values: **(checked)**
   ```
 
 Those settings keep a host from starting a recipe on its own, but a model can still find a recipe's file while
-following another skill. So a recipe runs only when the user names it (`/fab:<name>`, `$fab:<name>`, or "run
-<name>"); a request that merely matches one is handled by the skills it asks for, and a recipe's body opens by saying
+following another skill. So a recipe runs only when the user names it (`/fab:<name>`, `$fab:<name>`, `/<name>`, or
+"run <name>"); a request that merely matches one is handled by the skills it asks for, and a recipe's body opens by saying
 so.
 
 ## Skill shape
@@ -77,9 +80,9 @@ description: <≤300 chars: what it does + the phrases that should trigger it>
 - "Done when" items are evidence (output, path, commit SHA), never "I checked".
 - Stay neutral between hosts: never name host-specific tools or features in a skill body. Say "ask the
   user", "use a fresh sub-agent if available". **(checked)**: see Forbidden strings. The one exception is a
-  `references/` file that gives the commands for calling a host's CLI from the other host (`review`'s
-  cross-host reviewer); the skill body still names neither host.
-- Refer to another skill as `fab:<name>`, with no host sigil (`/` or `$`), so one body works in both hosts. Every
+  `references/` file that gives the commands for calling one host's CLI from another (`review`'s cross-host
+  reviewers); the skill body still names no host.
+- Refer to another skill as `fab:<name>`, with no host sigil (`/` or `$`), so one body works in every host. Every
   `fab:<name>` under `skills/` must name an existing skill. **(checked)**
 
 ## Gates
@@ -330,12 +333,14 @@ test fixtures may name them.
 | `waffleoff` | the old global command fab replaces |
 | `AskUserQuestion`, `TodoWrite`, `EnterPlanMode`, `ExitPlanMode` | Claude-only tool names |
 | `request_user_input`, `update_plan` | Codex-only tool names |
+| `run_command`, `ask_question`, `update_steps`, `invoke_subagent` | Antigravity-only tool names |
 
 ## Versioning
 
-- The version lives in `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`, and they must match. **(checked)**
-- Bump on every shipped change: **patch** for wording and changes inside existing skills, **minor** for a new skill
-  or recipe, **major** for a rename or removal.
+- The version lives in `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, and `.antigravity-plugin/plugin.json`,
+  and they must match. **(checked)**
+- Bump on every shipped change: **patch** for wording and changes inside existing skills, **minor** for a new skill,
+  recipe, or host, **major** for a rename or removal.
 - Both catalogs (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`) point at the repo root and list
   the plugin `fab`. **(checked)**
 

@@ -15,7 +15,7 @@ the build's final commit.
   A bug report outside a build goes to fab:debug instead.
 - `build.md` (its final SHA and Checks), `spec.md`, `plan.md`, and `design.md` when present. A skipped approval
   gate counts; a skipped step (`step:` note) doesn't.
-- The repo's `AGENTS.md`/`CLAUDE.md`: test commands, commit rules, hooks.
+- The repo's `AGENTS.md`/`CLAUDE.md`/`GEMINI.md`: test commands, commit rules, hooks.
 - Preferences: `~/.config/fab/preferences.md`. Anything it settles is not asked.
 - Personal override: if `~/.config/fab/skills/test.md` exists, read it and apply it on top of this skill (see fab conventions: Personal layer).
 

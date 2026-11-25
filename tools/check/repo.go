@@ -31,6 +31,7 @@ var (
 		"agent-skills:", "waffleoff",
 		"AskUserQuestion", "TodoWrite", "EnterPlanMode", "ExitPlanMode",
 		"request_user_input", "update_plan",
+		"run_command", "ask_question", "update_steps", "invoke_subagent",
 	}
 )
 
@@ -177,7 +178,7 @@ func checkForbidden(skillsDir string) []Finding {
 	return out
 }
 
-// checkManifests requires both plugin.json files to agree and both catalogs
+// checkManifests requires the three plugin.json files to agree and both catalogs
 // to list plugin fab at the repo root.
 func checkManifests(root string) []Finding {
 	var out []Finding
@@ -188,8 +189,9 @@ func checkManifests(root string) []Finding {
 	paths := []string{
 		filepath.Join(root, ".claude-plugin", "plugin.json"),
 		filepath.Join(root, ".codex-plugin", "plugin.json"),
+		filepath.Join(root, ".antigravity-plugin", "plugin.json"),
 	}
-	var versions []string
+	first, firstPath := "", ""
 	for _, p := range paths {
 		var m plugin
 		if f := readJSON(p, &m); f != nil {
@@ -201,12 +203,15 @@ func checkManifests(root string) []Finding {
 		}
 		if m.Version == "" {
 			out = append(out, Finding{Path: p, Rule: "manifest", Msg: "version is required"})
+			continue
 		}
-		versions = append(versions, m.Version)
-	}
-	if len(versions) == 2 && versions[0] != versions[1] {
-		out = append(out, Finding{Path: paths[1], Rule: "manifest",
-			Msg: fmt.Sprintf("version %q differs from .claude-plugin/plugin.json %q", versions[1], versions[0])})
+		if firstPath == "" {
+			first, firstPath = m.Version, p
+		} else if m.Version != first {
+			rel, _ := filepath.Rel(root, firstPath)
+			out = append(out, Finding{Path: p, Rule: "manifest",
+				Msg: fmt.Sprintf("version %q differs from %s %q", m.Version, rel, first)})
+		}
 	}
 
 	claudeCat := filepath.Join(root, ".claude-plugin", "marketplace.json")

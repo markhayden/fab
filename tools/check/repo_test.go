@@ -31,6 +31,7 @@ func validRepo() map[string]string {
 	return map[string]string{
 		".claude-plugin/plugin.json":       `{"name":"fab","version":"0.1.0"}`,
 		".codex-plugin/plugin.json":        `{"name":"fab","version":"0.1.0"}`,
+		".antigravity-plugin/plugin.json":  `{"name":"fab","version":"0.1.0"}`,
 		".claude-plugin/marketplace.json":  `{"name":"fab","plugins":[{"name":"fab","source":"./"}]}`,
 		".agents/plugins/marketplace.json": `{"name":"fab","plugins":[{"name":"fab","source":{"source":"local","path":"./"}}]}`,
 		"skills/plan/SKILL.md": skillMD("plan", "skill", "",
@@ -116,19 +117,45 @@ func TestCheckRepo(t *testing.T) {
 		{"forbidden string, case-insensitive", map[string]string{
 			"skills/plan/references/format.md": "Call askuserquestion here.\n",
 		}, "forbidden", "plan/references/format.md"},
+		{"forbidden antigravity run_command", map[string]string{
+			"skills/plan/references/format.md": "Use run_command here.\n",
+		}, "forbidden", "plan/references/format.md"},
+		{"forbidden antigravity ask_question", map[string]string{
+			"skills/plan/references/format.md": "Use ask_question here.\n",
+		}, "forbidden", "plan/references/format.md"},
+		{"forbidden antigravity update_steps", map[string]string{
+			"skills/plan/references/format.md": "Use update_steps here.\n",
+		}, "forbidden", "plan/references/format.md"},
+		{"forbidden antigravity invoke_subagent", map[string]string{
+			"skills/plan/references/format.md": "Use invoke_subagent here.\n",
+		}, "forbidden", "plan/references/format.md"},
+		{"antigravity version empty", map[string]string{
+			".antigravity-plugin/plugin.json": `{"name":"fab"}`,
+		}, "manifest", ".antigravity-plugin/plugin.json"},
 		{"forbidden string in non-markdown file", map[string]string{
 			"skills/go/agents/openai.yaml": "# waffleoff\npolicy:\n  allow_implicit_invocation: false\n",
 		}, "forbidden", "go/agents/openai.yaml"},
 		{"plugin versions differ", map[string]string{
 			".codex-plugin/plugin.json": `{"name":"fab","version":"0.2.0"}`,
 		}, "manifest", ".codex-plugin/plugin.json"},
+		{"antigravity version differs", map[string]string{
+			".antigravity-plugin/plugin.json": `{"name":"fab","version":"0.2.0"}`,
+		}, "manifest", ".antigravity-plugin/plugin.json"},
+		{"antigravity manifest missing", map[string]string{
+			".antigravity-plugin/plugin.json": del,
+		}, "manifest", ".antigravity-plugin/plugin.json"},
 		{"plugin name wrong", map[string]string{
 			".claude-plugin/plugin.json": `{"name":"ramrod","version":"0.1.0"}`,
 		}, "manifest", ".claude-plugin/plugin.json"},
 		{"plugin version empty", map[string]string{
-			".claude-plugin/plugin.json": `{"name":"fab"}`,
-			".codex-plugin/plugin.json":  `{"name":"fab"}`,
+			".claude-plugin/plugin.json":      `{"name":"fab"}`,
+			".codex-plugin/plugin.json":       `{"name":"fab"}`,
+			".antigravity-plugin/plugin.json": `{"name":"fab"}`,
 		}, "manifest", "plugin.json"},
+		{"first manifest broken, later ones still compared", map[string]string{
+			".claude-plugin/plugin.json":      `{`,
+			".antigravity-plugin/plugin.json": `{"name":"fab","version":"0.2.0"}`,
+		}, "manifest", ".antigravity-plugin/plugin.json"},
 		{"plugin.json missing", map[string]string{
 			".codex-plugin/plugin.json": del,
 		}, "manifest", ".codex-plugin/plugin.json"},
@@ -163,7 +190,7 @@ func TestCheckRepo(t *testing.T) {
 				t.Fatal(err)
 			}
 			for _, f := range findings {
-				if f.Rule == tc.wantRule && strings.HasSuffix(f.Path, tc.wantFile) && !f.Warn {
+				if f.Rule == tc.wantRule && strings.HasSuffix(filepath.ToSlash(f.Path), tc.wantFile) && !f.Warn {
 					return
 				}
 			}
@@ -177,6 +204,39 @@ func TestSpikeStubsPass(t *testing.T) {
 	for _, dir := range []string{"testdata/hello", "testdata/hello-recipe"} {
 		for _, f := range append(checkSkill(dir), checkRecipe(dir)...) {
 			t.Errorf("%s: unexpected finding: %s", dir, f)
+		}
+	}
+}
+
+func TestManifestEmptyFirstVersionIsNotBaseline(t *testing.T) {
+	files := validRepo()
+	files[".claude-plugin/plugin.json"] = `{"name":"fab"}`
+	findings, err := run(writeRepo(t, files))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(findings) != 1 || !strings.HasSuffix(filepath.ToSlash(findings[0].Path), ".claude-plugin/plugin.json") {
+		t.Fatalf("want only the empty-version finding on .claude-plugin/plugin.json, got %v", findings)
+	}
+}
+
+func TestManifestEveryMismatchReported(t *testing.T) {
+	files := validRepo()
+	files[".codex-plugin/plugin.json"] = `{"name":"fab","version":"0.2.0"}`
+	files[".antigravity-plugin/plugin.json"] = `{"name":"fab","version":"0.3.0"}`
+	findings, err := run(writeRepo(t, files))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{".codex-plugin/plugin.json", ".antigravity-plugin/plugin.json"} {
+		found := false
+		for _, f := range findings {
+			if strings.HasSuffix(filepath.ToSlash(f.Path), want) {
+				found = true
+			}
+		}
+		if !found {
+			t.Errorf("no finding for %s in %v", want, findings)
 		}
 	}
 }

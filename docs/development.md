@@ -15,6 +15,7 @@ git config core.hooksPath .githooks   # pre-commit runs tools/check
 ```sh
 go run ./tools/check   # every rule marked (checked) in docs/conventions.md
 go test ./...          # validator tests; fixtures are generated in temp dirs, plus tools/check/testdata
+agy plugin validate .  # Antigravity's own manifest check, without installing (one expected AGENTS.md warning)
 ```
 
 The check exits 1 on errors and 2 if it can't run. A skill over 150 lines warns but passes.
@@ -27,7 +28,7 @@ Claude, without installing:
 claude --plugin-dir ~/go/src/github.com/markhayden/fab
 ```
 
-Installed from a local checkout (both hosts). Plugin caches copy the files, so reinstall after each change:
+Installed from a local checkout (every host). Plugin caches copy the files, so reinstall after each change:
 
 ```sh
 claude plugin marketplace add ~/go/src/github.com/markhayden/fab
@@ -35,6 +36,9 @@ claude plugin uninstall fab@fab; claude plugin install fab@fab
 
 codex plugin marketplace add ~/go/src/github.com/markhayden/fab
 codex plugin remove fab@fab; codex plugin add fab@fab
+
+agy plugin install ~/go/src/github.com/markhayden/fab   # copies to ~/.gemini/config/plugins/fab
+agy plugin validate ~/go/src/github.com/markhayden/fab  # one expected warning: AGENTS.md isn't a plugin rule
 ```
 
 Headless runs, useful for live tests:
@@ -42,7 +46,16 @@ Headless runs, useful for live tests:
 ```sh
 claude -p '/fab:voice <ask>'
 codex exec --skip-git-repo-check '$fab:voice <ask>' </dev/null
+agy --settings '{"permissions":{"allow":["command(git)","command(ls)","command(mkdir)","write_file(.fab/)"]}}' \
+  --add-dir ~/.config/fab -p '/grill <ask>' </dev/null
 ```
+
+Headless `agy` can't prompt: a tool no rule allows is denied, which ends the run with no output (still exit 0), so an
+empty reply with exit 0 means a tool was denied: check the allow rules. Pass `--settings` with the allow rules a test
+needs, and `--add-dir ~/.config/fab`,
+
+since every skill reads its override there, every flag before `-p`. In Antigravity, `/plan` and `/voice` reach its own
+commands, so test those two by asking for them in words ("run fab's voice skill: <ask>").
 
 With `--plugin-dir`, headless Claude can't read the checkout's `docs/` or `references/` (outside its allowed
 directories), so skills fall back to their own text, e.g. inventing a ledger format. Add `--add-dir <checkout>` for
@@ -59,11 +72,12 @@ To live-test an unreleased skill in Codex, point the prompt at the checkout inst
 `~/.codex/plugins/cache/` no longer works: Codex rebuilds the cache from the marketplace at startup (seen
 2026-11-21).
 
-Verified on Claude Code 2.1.329 and Codex CLI 0.170.0.
+Verified on Claude Code 2.1.329 and Codex CLI 0.170.0; the Antigravity lines on Antigravity CLI 1.5.17.
 
 ## Versioning
 
-The version lives only in `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`; the check fails if they differ.
+The version lives only in the three `plugin.json` files (`.claude-plugin/`, `.codex-plugin/`, `.antigravity-plugin/`);
+the check fails if they differ.
 Bump on every shipped change, as `conventions.md` Versioning says.
 
 The bump is what makes Claude update. Tested 2026-11-20 with a fixture plugin (Claude from a local-path marketplace,
@@ -82,6 +96,7 @@ path; both source types land in the same versioned cache.
 ```sh
 claude plugin marketplace update fab && claude plugin update fab@fab   # then restart the session
 codex plugin marketplace upgrade fab
+agy plugin install https://github.com/markhayden/fab                  # same command as installing
 ```
 
 ## Adding or changing a skill
@@ -92,7 +107,7 @@ Every skill goes through a grill session (see `skill-audit.md`):
 2. Grill it: cut what the model already knows, merge overlaps, or drop it.
 3. Name review against `conventions.md`.
 4. Write it in the standard shape.
-5. Test it live in both hosts.
+5. Test it live in every host.
 6. Log the decision and evidence in `skill-audit.md`.
 7. Run the check, bump the version, commit.
 
